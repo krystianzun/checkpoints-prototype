@@ -1,6 +1,8 @@
 export type Persona = "power_user" | "new_user";
 
-export type IntensityDirection = "lower" | "maintain" | "increase";
+export type BodyTag = "lower_body" | "core" | "upper_body" | "full_body";
+
+export type TagComparison = "same" | "different";
 
 export interface CheckpointData {
   persona: Persona;
@@ -21,11 +23,10 @@ export interface CheckpointData {
   streakDays: number[];
   percentile: number;
   seasonAchievements: Achievement[];
-  // Plan reset
-  intensityDirection: IntensityDirection;
-  intensityCopy: string;
-  intensityReason: string;
-  upcomingFocus: string;
+  // Plan reset - tag-based theming
+  previousTag: BodyTag;
+  upcomingTag: BodyTag;
+  tagComparison: TagComparison;
   upcomingFocusDescription: string;
   upcomingGoalConnection: string;
   planItems: PlanItem[];

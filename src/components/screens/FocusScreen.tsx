@@ -18,34 +18,59 @@ export default function FocusScreen({ data, onNext }: Props) {
     >
       <div className="absolute inset-0 bg-gradient-to-b from-indigo-500/10 via-background to-background" />
 
-      <div className="relative z-10 flex flex-col flex-1 justify-center gap-8">
-        <motion.p
-          initial={{ y: -10, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          className="text-base text-white/50 text-center"
+      <div className="relative z-10 flex flex-col flex-1 justify-center gap-6">
+        <motion.div
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ type: "spring", delay: 0.1 }}
+          className={`self-center px-4 py-2 rounded-full border text-sm font-semibold ${
+            data.tagComparison === "different"
+              ? "bg-accent/15 text-accent border-accent/20"
+              : "bg-blue-400/15 text-blue-300 border-blue-400/20"
+          }`}
         >
-          {data.upcomingFocusDescription.split(".")[0]}.
+          {data.tagComparison === "different"
+            ? "🔄 New Focus"
+            : "💪 Continuing Focus"}
+        </motion.div>
+
+        <motion.h2
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.2 }}
+          className="text-3xl font-bold text-center leading-tight"
+        >
+          Your Next Chapter
+        </motion.h2>
+
+        <motion.p
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.3 }}
+          className="text-base text-white/60 text-center leading-relaxed"
+        >
+          {data.upcomingFocusDescription}
         </motion.p>
 
         <motion.div
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          transition={{ delay: 0.2, type: "spring" }}
-          className="text-center"
+          transition={{ delay: 0.4, type: "spring" }}
+          className="text-center py-4"
         >
-          <p className="text-lg text-white/60 mb-2">
-            We&apos;re going to shift the focus to your
+          <p className="text-sm text-white/40 uppercase tracking-wider mb-2">
+            Focus Area
           </p>
-          <p className="text-5xl font-black leading-tight">
-            {data.upcomingFocus.toLowerCase()}
+          <p className="text-4xl font-black text-accent">
+            {data.upcomingTag.replace("_", " ").toUpperCase()}
           </p>
         </motion.div>
 
         <motion.p
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.4 }}
-          className="text-base text-white/60 text-center leading-relaxed"
+          transition={{ delay: 0.5 }}
+          className="text-sm text-white/60 text-center leading-relaxed"
         >
           {data.upcomingGoalConnection}
         </motion.p>
@@ -58,24 +83,6 @@ export default function FocusScreen({ data, onNext }: Props) {
         >
           <span className="text-sm text-accent font-medium">🎯 Your goal:</span>
           <span className="text-sm font-bold text-white">{data.goal}</span>
-        </motion.div>
-
-        {/* Why we picked this — soft theme intro per Rob's feedback */}
-        <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.8 }}
-          className="p-4 bg-surface-light/50 rounded-2xl border border-white/5"
-        >
-          <p className="text-xs text-white/40 uppercase tracking-wider mb-2">
-            Why this focus?
-          </p>
-          <p className="text-sm text-white/70 leading-relaxed">
-            Based on your recent sessions and progress, we think{" "}
-            {data.upcomingFocus.toLowerCase()} work will give you the best
-            results right now. This pairs naturally with your previous lower
-            body training and keeps you moving toward your goal.
-          </p>
         </motion.div>
       </div>
 

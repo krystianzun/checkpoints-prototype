@@ -11,12 +11,11 @@ import SummaryScreen from "./screens/SummaryScreen";
 import StatsScreen from "./screens/StatsScreen";
 import EffortScreen from "./screens/EffortScreen";
 import StreakScreen from "./screens/StreakScreen";
-import IntensityScreen from "./screens/IntensityScreen";
 import FocusScreen from "./screens/FocusScreen";
 import PlanScreen from "./screens/PlanScreen";
 import CompletionScreen from "./screens/CompletionScreen";
 
-const TOTAL_SCREENS = 10;
+const TOTAL_SCREENS = 9;
 
 export default function CheckpointFlow() {
   const [persona, setPersona] = useState<Persona>("power_user");
@@ -91,12 +90,10 @@ export default function CheckpointFlow() {
           />
         );
       case 6:
-        return <IntensityScreen key="intensity" data={data} onNext={next} />;
-      case 7:
         return <FocusScreen key="focus" data={data} onNext={next} />;
-      case 8:
+      case 7:
         return <PlanScreen key="plan" data={data} onNext={next} />;
-      case 9:
+      case 8:
         return (
           <CompletionScreen key="completion" data={data} onRestart={restart} />
         );
@@ -108,7 +105,7 @@ export default function CheckpointFlow() {
   const sectionLabel =
     currentScreen <= 4
       ? "Wrapped Moment"
-      : currentScreen <= 8
+      : currentScreen <= 7
         ? "Plan Reset"
         : "Complete";
 

@@ -36,15 +36,13 @@ export const powerUserData: CheckpointData = {
       description: "Burned 35% more than last chapter",
     },
   ],
-  intensityDirection: "increase",
-  intensityCopy: "You're KILLING it recently!",
-  intensityReason:
-    "You can handle a little extra spice in your next set of workouts. We're going to push the intensity a little more — you've got this!",
-  upcomingFocus: "Core Body",
+  previousTag: "lower_body",
+  upcomingTag: "core",
+  tagComparison: "different",
   upcomingFocusDescription:
-    "You laid the foundation. Now we reinforce it. We're going to shift the focus to your core body.",
+    "You laid the foundation with lower body work. Now we reinforce it by shifting focus to your core.",
   upcomingGoalConnection:
-    "This will improve your form & efficiency, helping you get more from each session to support your goal of losing weight.",
+    "Core training improves your form & efficiency, helping you get more from each session to support your goal of losing weight.",
   planItems: [
     { id: "goal", label: "Goal", value: "Lose Weight", editable: false },
     {
@@ -54,15 +52,9 @@ export const powerUserData: CheckpointData = {
       editable: true,
     },
     {
-      id: "intensity",
-      label: "Intensity Trend",
-      value: "Increasing",
-      editable: true,
-    },
-    {
       id: "focus",
       label: "Upcoming Focus",
-      value: "Core Body",
+      value: "Core",
       editable: true,
     },
   ],
@@ -99,13 +91,11 @@ export const newUserData: CheckpointData = {
       description: "Tried 3 different workout styles",
     },
   ],
-  intensityDirection: "increase",
-  intensityCopy: "You're surpassing our expectations!",
-  intensityReason:
-    "We designed your first chapter to ease you in — but you've shown us you're ready for more. Your plan is upgrading.",
-  upcomingFocus: "Full Body",
+  previousTag: "full_body",
+  upcomingTag: "full_body",
+  tagComparison: "same",
   upcomingFocusDescription:
-    "Now that you've got the basics down, we're opening up the full range. Expect more variety and slightly longer sessions.",
+    "You're building a solid foundation with full body training. We're keeping this focus to help you develop consistency.",
   upcomingGoalConnection:
     "Full body training maximises calorie burn across sessions, directly fuelling your goal of losing weight.",
   planItems: [
@@ -114,12 +104,6 @@ export const newUserData: CheckpointData = {
       id: "length",
       label: "Workout Length",
       value: "20 mins",
-      editable: true,
-    },
-    {
-      id: "intensity",
-      label: "Intensity Trend",
-      value: "Increasing",
       editable: true,
     },
     {

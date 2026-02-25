@@ -15,8 +15,7 @@ export default function PlanScreen({ data, onNext }: Props) {
 
   const options: Record<string, string[]> = {
     length: ["15 mins", "20 mins", "25 mins", "30 mins", "40 mins"],
-    intensity: ["Decreasing", "Maintaining", "Increasing"],
-    focus: ["Core Body", "Full Body", "Upper Body", "Lower Body", "Cardio"],
+    focus: ["Core", "Full Body", "Upper Body", "Lower Body"],
   };
 
   const cycleValue = (id: string) => {

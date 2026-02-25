@@ -45,7 +45,7 @@ export default function CompletionScreen({ data, onRestart }: Props) {
         >
           Your plan has been updated. Time to crush your next chapter focused on{" "}
           <span className="text-accent font-semibold">
-            {data.upcomingFocus.toLowerCase()}
+            {data.upcomingTag.replace("_", " ")}
           </span>
           .
         </motion.p>
