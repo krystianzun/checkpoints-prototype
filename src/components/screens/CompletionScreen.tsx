@@ -14,7 +14,7 @@ export default function CompletionScreen({ data, onRestart }: Props) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="relative flex flex-col items-center justify-between h-full px-8 pt-24 pb-16"
+      className="relative flex flex-col items-center justify-between h-full px-10 pt-12 pb-8"
     >
       <div className="absolute inset-0 bg-gradient-to-b from-accent/20 via-accent/5 to-background" />
 
@@ -44,7 +44,10 @@ export default function CompletionScreen({ data, onRestart }: Props) {
           className="text-base text-white/50 leading-relaxed"
         >
           Your plan has been updated. Time to crush your next chapter focused on{" "}
-          <span className="text-accent font-semibold">{data.upcomingFocus.toLowerCase()}</span>.
+          <span className="text-accent font-semibold">
+            {data.upcomingFocus.toLowerCase()}
+          </span>
+          .
         </motion.p>
 
         <motion.div

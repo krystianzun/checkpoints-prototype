@@ -17,7 +17,7 @@ export default function StreakScreen({ data, onNext }: Props) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="relative flex flex-col h-full px-8 pt-24 pb-16"
+      className="relative flex flex-col h-full px-10 pt-12 pb-6 overflow-y-auto"
     >
       <div className="absolute inset-0 bg-gradient-to-b from-purple-500/15 via-background to-background" />
 
@@ -37,9 +37,13 @@ export default function StreakScreen({ data, onNext }: Props) {
           className="text-center"
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-500/15 rounded-full border border-purple-400/20 mb-4">
-            <span className="text-purple-300 text-sm font-semibold">🔥 {data.streakWeeks} Week Streak</span>
+            <span className="text-purple-300 text-sm font-semibold">
+              🔥 {data.streakWeeks} Week Streak
+            </span>
           </div>
-          <p className="text-5xl font-black">{activeDays}/{totalDays}</p>
+          <p className="text-5xl font-black">
+            {activeDays}/{totalDays}
+          </p>
           <p className="text-base text-white/50 mt-1">days active</p>
         </motion.div>
 
@@ -51,7 +55,10 @@ export default function StreakScreen({ data, onNext }: Props) {
           className="grid grid-cols-7 gap-2"
         >
           {["M", "T", "W", "T", "F", "S", "S"].map((day, i) => (
-            <div key={`label-${i}`} className="text-center text-[10px] text-white/30 font-medium">
+            <div
+              key={`label-${i}`}
+              className="text-center text-[10px] text-white/30 font-medium"
+            >
               {day}
             </div>
           ))}
@@ -79,7 +86,9 @@ export default function StreakScreen({ data, onNext }: Props) {
           transition={{ delay: 0.8 }}
           className="flex flex-col gap-2"
         >
-          <p className="text-xs text-white/40 uppercase tracking-wider mb-1">Season Achievements</p>
+          <p className="text-xs text-white/40 uppercase tracking-wider mb-1">
+            Season Achievements
+          </p>
           {data.seasonAchievements.map((ach, i) => (
             <motion.div
               key={i}

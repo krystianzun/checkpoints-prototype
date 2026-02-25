@@ -17,7 +17,7 @@ export default function StatsScreen({ data, onNext }: Props) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="relative flex flex-col h-full px-8 pt-24 pb-16"
+      className="relative flex flex-col h-full px-10 pt-12 pb-8"
     >
       <div className="absolute inset-0 bg-gradient-to-b from-accent/10 via-background to-background" />
 
@@ -62,9 +62,15 @@ export default function StatsScreen({ data, onNext }: Props) {
           transition={{ delay: 0.6 }}
           className="p-4 bg-surface-light/50 rounded-2xl border border-white/5"
         >
-          <p className="text-xs text-white/40 uppercase tracking-wider mb-1">Highlight</p>
-          <p className="text-sm font-semibold text-accent">{data.highlightDate}</p>
-          <p className="text-sm text-white/70 mt-1">{data.highlightDescription}</p>
+          <p className="text-xs text-white/40 uppercase tracking-wider mb-1">
+            Highlight
+          </p>
+          <p className="text-sm font-semibold text-accent">
+            {data.highlightDate}
+          </p>
+          <p className="text-sm text-white/70 mt-1">
+            {data.highlightDescription}
+          </p>
         </motion.div>
       </div>
 

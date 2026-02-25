@@ -14,7 +14,7 @@ export default function FocusScreen({ data, onNext }: Props) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="relative flex flex-col h-full px-8 pt-24 pb-16"
+      className="relative flex flex-col h-full px-10 pt-12 pb-8"
     >
       <div className="absolute inset-0 bg-gradient-to-b from-indigo-500/10 via-background to-background" />
 
@@ -33,8 +33,12 @@ export default function FocusScreen({ data, onNext }: Props) {
           transition={{ delay: 0.2, type: "spring" }}
           className="text-center"
         >
-          <p className="text-lg text-white/60 mb-2">We&apos;re going to shift the focus to your</p>
-          <p className="text-5xl font-black leading-tight">{data.upcomingFocus.toLowerCase()}</p>
+          <p className="text-lg text-white/60 mb-2">
+            We&apos;re going to shift the focus to your
+          </p>
+          <p className="text-5xl font-black leading-tight">
+            {data.upcomingFocus.toLowerCase()}
+          </p>
         </motion.div>
 
         <motion.p
@@ -63,11 +67,14 @@ export default function FocusScreen({ data, onNext }: Props) {
           transition={{ delay: 0.8 }}
           className="p-4 bg-surface-light/50 rounded-2xl border border-white/5"
         >
-          <p className="text-xs text-white/40 uppercase tracking-wider mb-2">Why this focus?</p>
+          <p className="text-xs text-white/40 uppercase tracking-wider mb-2">
+            Why this focus?
+          </p>
           <p className="text-sm text-white/70 leading-relaxed">
-            Based on your recent sessions and progress, we think {data.upcomingFocus.toLowerCase()} work
-            will give you the best results right now. This pairs naturally with your previous lower body
-            training and keeps you moving toward your goal.
+            Based on your recent sessions and progress, we think{" "}
+            {data.upcomingFocus.toLowerCase()} work will give you the best
+            results right now. This pairs naturally with your previous lower
+            body training and keeps you moving toward your goal.
           </p>
         </motion.div>
       </div>

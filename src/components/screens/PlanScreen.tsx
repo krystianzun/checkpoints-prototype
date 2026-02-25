@@ -28,7 +28,7 @@ export default function PlanScreen({ data, onNext }: Props) {
         const currentIndex = opts.indexOf(item.value);
         const nextIndex = (currentIndex + 1) % opts.length;
         return { ...item, value: opts[nextIndex] };
-      })
+      }),
     );
     setEditingId(id);
     setTimeout(() => setEditingId(null), 600);
@@ -39,7 +39,7 @@ export default function PlanScreen({ data, onNext }: Props) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="relative flex flex-col h-full px-8 pt-24 pb-16"
+      className="relative flex flex-col h-full px-10 pt-12 pb-8 overflow-y-auto"
     >
       <div className="absolute inset-0 bg-gradient-to-b from-accent/5 via-background to-background" />
 

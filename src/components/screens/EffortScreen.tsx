@@ -42,7 +42,7 @@ export default function EffortScreen({ data, onNext }: Props) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="relative flex flex-col h-full px-8 pt-24 pb-16"
+      className="relative flex flex-col h-full px-10 pt-12 pb-8"
     >
       <div className="absolute inset-0 bg-gradient-to-b from-orange-500/10 via-background to-background" />
 
@@ -68,10 +68,14 @@ export default function EffortScreen({ data, onNext }: Props) {
                 {stat.icon}
               </div>
               <div className="flex-1">
-                <p className="text-xs text-white/40 uppercase tracking-wider">{stat.label}</p>
+                <p className="text-xs text-white/40 uppercase tracking-wider">
+                  {stat.label}
+                </p>
                 <div className="flex items-baseline gap-2">
                   <span className="text-3xl font-black">{stat.value}</span>
-                  <span className="text-sm font-semibold text-white/50">{stat.unit}</span>
+                  <span className="text-sm font-semibold text-white/50">
+                    {stat.unit}
+                  </span>
                 </div>
               </div>
               {stat.delta && (

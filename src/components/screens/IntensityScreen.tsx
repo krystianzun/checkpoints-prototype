@@ -43,7 +43,7 @@ export default function IntensityScreen({ data, onNext }: Props) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="relative flex flex-col h-full px-8 pt-24 pb-16"
+      className="relative flex flex-col h-full px-10 pt-12 pb-8"
     >
       <div className="absolute inset-0 bg-gradient-to-b from-blue-500/10 via-background to-background" />
 
@@ -78,8 +78,8 @@ export default function IntensityScreen({ data, onNext }: Props) {
               {data.intensityDirection === "increase"
                 ? "increase"
                 : data.intensityDirection === "maintain"
-                ? "maintain"
-                : "recalibrate"}{" "}
+                  ? "maintain"
+                  : "recalibrate"}{" "}
             </span>
             your intensity.
           </p>
@@ -107,8 +107,8 @@ export default function IntensityScreen({ data, onNext }: Props) {
               {data.intensityDirection === "increase"
                 ? "↑ Going up"
                 : data.intensityDirection === "maintain"
-                ? "→ Steady"
-                : "↓ Easing in"}
+                  ? "→ Steady"
+                  : "↓ Easing in"}
             </span>
           </div>
           <div className="space-y-2">

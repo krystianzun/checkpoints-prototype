@@ -23,7 +23,8 @@ export default function CheckpointFlow() {
   const [currentScreen, setCurrentScreen] = useState(0);
   const [direction, setDirection] = useState(1);
 
-  const data: CheckpointData = persona === "power_user" ? powerUserData : newUserData;
+  const data: CheckpointData =
+    persona === "power_user" ? powerUserData : newUserData;
 
   const next = useCallback(() => {
     setDirection(1);
@@ -64,7 +65,14 @@ export default function CheckpointFlow() {
   const renderScreen = () => {
     switch (currentScreen) {
       case 0:
-        return <WelcomeScreen key="welcome-celebrate" data={data} onNext={next} section="celebrate" />;
+        return (
+          <WelcomeScreen
+            key="welcome-celebrate"
+            data={data}
+            onNext={next}
+            section="celebrate"
+          />
+        );
       case 1:
         return <SummaryScreen key="summary" data={data} onNext={next} />;
       case 2:
@@ -74,7 +82,14 @@ export default function CheckpointFlow() {
       case 4:
         return <StreakScreen key="streak" data={data} onNext={next} />;
       case 5:
-        return <WelcomeScreen key="welcome-plan" data={data} onNext={next} section="plan" />;
+        return (
+          <WelcomeScreen
+            key="welcome-plan"
+            data={data}
+            onNext={next}
+            section="plan"
+          />
+        );
       case 6:
         return <IntensityScreen key="intensity" data={data} onNext={next} />;
       case 7:
@@ -82,7 +97,9 @@ export default function CheckpointFlow() {
       case 8:
         return <PlanScreen key="plan" data={data} onNext={next} />;
       case 9:
-        return <CompletionScreen key="completion" data={data} onRestart={restart} />;
+        return (
+          <CompletionScreen key="completion" data={data} onRestart={restart} />
+        );
       default:
         return null;
     }
@@ -92,17 +109,13 @@ export default function CheckpointFlow() {
     currentScreen <= 4
       ? "Wrapped Moment"
       : currentScreen <= 8
-      ? "Plan Reset"
-      : "Complete";
+        ? "Plan Reset"
+        : "Complete";
 
   return (
     <div className="flex flex-col items-center gap-8">
       {/* Persona switcher */}
       <div className="flex flex-col items-center gap-4">
-        <h1 className="text-2xl font-bold text-white">Checkpoints Prototype</h1>
-        <p className="text-sm text-white/40 max-w-md text-center">
-          Interactive prototype reflecting sLT feedback: relative progress, streaks, soft themes, plan upgrade moments, Strava-inspired stats, and skip flow.
-        </p>
         <div className="flex gap-2 mt-2">
           <button
             onClick={() => switchPersona("power_user")}
@@ -131,8 +144,8 @@ export default function CheckpointFlow() {
               currentScreen <= 4
                 ? "bg-accent/15 text-accent"
                 : currentScreen <= 8
-                ? "bg-blue-400/15 text-blue-300"
-                : "bg-white/10 text-white/60"
+                  ? "bg-blue-400/15 text-blue-300"
+                  : "bg-white/10 text-white/60"
             }`}
           >
             {sectionLabel}
@@ -147,7 +160,11 @@ export default function CheckpointFlow() {
       <PhoneFrame>
         {/* Progress dots with skip */}
         {currentScreen < TOTAL_SCREENS - 1 && (
-          <ProgressDots total={TOTAL_SCREENS - 1} current={currentScreen} onSkip={skip} />
+          <ProgressDots
+            total={TOTAL_SCREENS - 1}
+            current={currentScreen}
+            onSkip={skip}
+          />
         )}
 
         <AnimatePresence custom={direction} mode="wait">
@@ -169,7 +186,8 @@ export default function CheckpointFlow() {
       {/* Feedback implementation notes */}
       <div className="max-w-md text-center pb-8">
         <p className="text-xs text-white/20">
-          Tap screens to navigate. Use Skip to jump to end. Switch personas to see different user stories.
+          Tap screens to navigate. Use Skip to jump to end. Switch personas to
+          see different user stories.
         </p>
       </div>
     </div>

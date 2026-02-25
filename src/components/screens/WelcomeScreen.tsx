@@ -17,7 +17,7 @@ export default function WelcomeScreen({ data, onNext, section }: Props) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="relative flex flex-col items-center justify-between h-full px-8 pt-24 pb-16"
+      className="relative flex flex-col items-center justify-between h-full px-10 pt-12 pb-8"
     >
       {/* Background gradient */}
       <div
@@ -58,7 +58,9 @@ export default function WelcomeScreen({ data, onNext, section }: Props) {
             transition={{ delay: 0.5 }}
             className="flex items-center gap-2 px-4 py-2 bg-accent/10 rounded-full border border-accent/20"
           >
-            <span className="text-accent text-sm font-semibold">⬆ Plan Upgrade</span>
+            <span className="text-accent text-sm font-semibold">
+              ⬆ Plan Upgrade
+            </span>
           </motion.div>
         )}
       </div>
@@ -69,9 +71,7 @@ export default function WelcomeScreen({ data, onNext, section }: Props) {
         transition={{ delay: 0.5 }}
         onClick={onNext}
         className={`relative z-10 w-full py-4 rounded-2xl font-semibold text-base tracking-wide ${
-          isCelebrate
-            ? "bg-accent text-background"
-            : "bg-white text-background"
+          isCelebrate ? "bg-accent text-background" : "bg-white text-background"
         }`}
       >
         {isCelebrate ? "Celebrate!" : "Plan"}
