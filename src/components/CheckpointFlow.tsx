@@ -107,11 +107,11 @@ export default function CheckpointFlow() {
       case 3:
         return <EffortScreen key="effort" data={data} onNext={next} />;
       case 4:
-        return <StreakScreen key="streak" data={data} onNext={next} />;
-      case 5:
         return (
           <AchievementsScreen key="achievements" data={data} onNext={next} />
         );
+      case 5:
+        return <StreakScreen key="streak" data={data} onNext={next} />;
       case 6:
         return <LeagueScreen key="league" data={data} onNext={next} />;
       case 7:
