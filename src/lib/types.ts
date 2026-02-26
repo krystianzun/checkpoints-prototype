@@ -37,7 +37,7 @@ export interface CheckpointData {
   highlightDescription: string;
   totalMinutes: number;
   previousTotalMinutes: number;
-  moodPoints: number;
+  movePoints: number;
   caloriesBurned: number;
   previousCaloriesBurned: number;
   streakWeeks: number;

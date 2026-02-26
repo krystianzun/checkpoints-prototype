@@ -22,8 +22,8 @@ export default function EffortScreen({ data, onNext }: Props) {
       icon: "⏱",
     },
     {
-      label: "Mood Points",
-      value: data.moodPoints.toLocaleString(),
+      label: "Move Points",
+      value: data.movePoints.toLocaleString(),
       unit: "MP",
       delta: null,
       icon: "✨",
