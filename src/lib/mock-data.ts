@@ -2,6 +2,11 @@ import { CheckpointData, WeeklyActivity } from "./types";
 
 export const powerUserData: CheckpointData = {
   persona: "power_user",
+  topStudios: [
+    { studio: "box", count: 6 },
+    { studio: "hiit", count: 5 },
+    { studio: "dance", count: 4 },
+  ],
   chapterSummary:
     "Your last few sessions in FitXR were all about your lower body — power through your legs in Box and rapid fire reps in HIIT.",
   goalConnection:
@@ -62,6 +67,11 @@ export const powerUserData: CheckpointData = {
 
 export const newUserData: CheckpointData = {
   persona: "new_user",
+  topStudios: [
+    { studio: "box", count: 3 },
+    { studio: "hiit", count: 3 },
+    { studio: "dance", count: 2 },
+  ],
   chapterSummary:
     "Your first chapter in FitXR focused on building a foundation — mixing Box, HIIT, and Dance to find what feels right.",
   goalConnection:
@@ -118,8 +128,13 @@ export const newUserData: CheckpointData = {
 // Build Strength variant - power user
 export const buildStrengthData: CheckpointData = {
   persona: "power_user",
+  topStudios: [
+    { studio: "combat", count: 7 },
+    { studio: "sculpt", count: 5 },
+    { studio: "box", count: 3 },
+  ],
   chapterSummary:
-    "Your last few sessions in FitXR were all about your lower body — power through your legs in Box and rapid fire reps in HIIT.",
+    "Your last few sessions in FitXR were all about your lower body — power through your legs in Combat and strength-building moves in Sculpt.",
   goalConnection:
     "You've been targeting some of the biggest muscle groups in your body — perfect for building a strong foundation.",
   goal: "Build Strength",
@@ -179,8 +194,13 @@ export const buildStrengthData: CheckpointData = {
 // Improve Mobility variant - power user
 export const improveMobilityData: CheckpointData = {
   persona: "power_user",
+  topStudios: [
+    { studio: "sculpt", count: 6 },
+    { studio: "dance", count: 5 },
+    { studio: "hiit", count: 4 },
+  ],
   chapterSummary:
-    "Your last few sessions in FitXR were all about your lower body — power through your legs in Box and rapid fire reps in HIIT.",
+    "Your last few sessions in FitXR were all about your lower body — controlled movements in Sculpt and dynamic flow in Dance.",
   goalConnection:
     "You've been working on lower body flexibility and range of motion — key areas for improving overall mobility.",
   goal: "Improve Mobility",
@@ -240,8 +260,13 @@ export const improveMobilityData: CheckpointData = {
 // Have Fun variant - power user
 export const haveFunData: CheckpointData = {
   persona: "power_user",
+  topStudios: [
+    { studio: "dance", count: 8 },
+    { studio: "zumba", count: 4 },
+    { studio: "box", count: 3 },
+  ],
   chapterSummary:
-    "Your last few sessions in FitXR were all about your lower body — power through your legs in Box and rapid fire reps in HIIT.",
+    "Your last few sessions in FitXR were all about your lower body — grooving through Dance and bringing the party energy in Zumba.",
   goalConnection:
     "You've been crushing lower body workouts and having a blast — that's what it's all about!",
   goal: "Have Fun",

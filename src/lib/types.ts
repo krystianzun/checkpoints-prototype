@@ -10,9 +10,24 @@ export type BodyTag = "lower_body" | "core" | "upper_body" | "full_body";
 
 export type TagComparison = "same" | "different";
 
+export type StudioType =
+  | "box"
+  | "combat"
+  | "hiit"
+  | "sculpt"
+  | "dance"
+  | "zumba"
+  | "slam";
+
+export interface StudioCount {
+  studio: StudioType;
+  count: number;
+}
+
 export interface CheckpointData {
   persona: Persona;
   // Wrapped moment
+  topStudios: StudioCount[]; // Top 2-3 studios by frequency
   chapterSummary: string;
   goalConnection: string;
   goal: string;
