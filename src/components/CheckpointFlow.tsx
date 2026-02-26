@@ -2,8 +2,14 @@
 
 import { useState, useCallback } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { CheckpointData, Persona } from "@/lib/types";
-import { powerUserData, newUserData } from "@/lib/mock-data";
+import { CheckpointData, Persona, Goal } from "@/lib/types";
+import {
+  powerUserData,
+  newUserData,
+  buildStrengthData,
+  improveMobilityData,
+  haveFunData,
+} from "@/lib/mock-data";
 import PhoneFrame from "./PhoneFrame";
 import ProgressDots from "./ProgressDots";
 import WelcomeScreen from "./screens/WelcomeScreen";
@@ -19,11 +25,25 @@ const TOTAL_SCREENS = 9;
 
 export default function CheckpointFlow() {
   const [persona, setPersona] = useState<Persona>("power_user");
+  const [goal, setGoal] = useState<Goal>("Lose Weight");
   const [currentScreen, setCurrentScreen] = useState(0);
   const [direction, setDirection] = useState(1);
 
-  const data: CheckpointData =
-    persona === "power_user" ? powerUserData : newUserData;
+  const getDataForGoal = (selectedGoal: Goal): CheckpointData => {
+    switch (selectedGoal) {
+      case "Build Strength":
+        return buildStrengthData;
+      case "Improve Mobility":
+        return improveMobilityData;
+      case "Have Fun":
+        return haveFunData;
+      case "Lose Weight":
+      default:
+        return persona === "power_user" ? powerUserData : newUserData;
+    }
+  };
+
+  const data: CheckpointData = getDataForGoal(goal);
 
   const next = useCallback(() => {
     setDirection(1);
@@ -42,6 +62,12 @@ export default function CheckpointFlow() {
 
   const switchPersona = (p: Persona) => {
     setPersona(p);
+    setCurrentScreen(0);
+    setDirection(-1);
+  };
+
+  const switchGoal = (g: Goal) => {
+    setGoal(g);
     setCurrentScreen(0);
     setDirection(-1);
   };
@@ -111,8 +137,9 @@ export default function CheckpointFlow() {
 
   return (
     <div className="flex flex-col items-center gap-8">
-      {/* Persona switcher */}
+      {/* Persona and Goal switchers */}
       <div className="flex flex-col items-center gap-4">
+        {/* Persona switcher */}
         <div className="flex gap-2 mt-2">
           <button
             onClick={() => switchPersona("power_user")}
@@ -135,6 +162,31 @@ export default function CheckpointFlow() {
             New User (Post-Onboarding)
           </button>
         </div>
+
+        {/* Goal switcher */}
+        <div className="flex gap-2 flex-wrap justify-center">
+          {(
+            [
+              "Lose Weight",
+              "Build Strength",
+              "Improve Mobility",
+              "Have Fun",
+            ] as Goal[]
+          ).map((g) => (
+            <button
+              key={g}
+              onClick={() => switchGoal(g)}
+              className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+                goal === g
+                  ? "bg-blue-400 text-background"
+                  : "bg-white/10 text-white/40 hover:bg-white/15"
+              }`}
+            >
+              {g}
+            </button>
+          ))}
+        </div>
+
         <div className="flex items-center gap-3 mt-1">
           <span
             className={`text-xs px-3 py-1 rounded-full font-medium ${

@@ -1,5 +1,11 @@
 export type Persona = "power_user" | "new_user";
 
+export type Goal =
+  | "Lose Weight"
+  | "Build Strength"
+  | "Improve Mobility"
+  | "Have Fun";
+
 export type BodyTag = "lower_body" | "core" | "upper_body" | "full_body";
 
 export type TagComparison = "same" | "different";
