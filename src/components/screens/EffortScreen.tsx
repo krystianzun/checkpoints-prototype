@@ -44,7 +44,7 @@ export default function EffortScreen({ data, onNext }: Props) {
       exit={{ opacity: 0 }}
       className="relative flex flex-col h-full px-10 pt-12 pb-8"
     >
-      <div className="absolute inset-0 bg-gradient-to-b from-orange-500/10 via-background to-background" />
+      <div className="absolute inset-0 bg-linear-to-b from-purple-500/10 via-background to-background" />
 
       <div className="relative z-10 flex flex-col flex-1 justify-center gap-4">
         <motion.p
@@ -92,7 +92,7 @@ export default function EffortScreen({ data, onNext }: Props) {
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.8 }}
-            className="mt-4 p-4 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 rounded-2xl border border-yellow-500/20 text-center"
+            className="mt-4 p-4 bg-linear-to-r from-yellow-500/10 to-orange-500/10 rounded-2xl border border-yellow-500/20 text-center"
           >
             <p className="text-sm text-yellow-400 font-semibold">
               🏅 Top {data.percentile}% of FitXR users this chapter

@@ -19,7 +19,7 @@ export default function StatsScreen({ data, onNext }: Props) {
       exit={{ opacity: 0 }}
       className="relative flex flex-col h-full px-10 pt-12 pb-8"
     >
-      <div className="absolute inset-0 bg-gradient-to-b from-accent/10 via-background to-background" />
+      <div className="absolute inset-0 bg-linear-to-b from-accent/10 via-background to-background" />
 
       <div className="relative z-10 flex flex-col flex-1 justify-center gap-6">
         <motion.p

@@ -16,7 +16,7 @@ export default function LeagueScreen({ data, onNext }: Props) {
       exit={{ opacity: 0 }}
       className="relative flex flex-col h-full px-10 pt-12 pb-6 overflow-y-auto"
     >
-      <div className="absolute inset-0 bg-gradient-to-b from-blue-500/15 via-background to-background" />
+      <div className="absolute inset-0 bg-linear-to-b from-blue-500/15 via-background to-background" />
 
       <div className="relative z-10 flex flex-col flex-1 justify-center gap-6">
         {/* League card */}
@@ -24,7 +24,7 @@ export default function LeagueScreen({ data, onNext }: Props) {
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 0.2, type: "spring" }}
-          className="relative bg-gradient-to-br from-blue-500/30 to-blue-600/20 rounded-2xl p-6 border border-blue-400/30 overflow-hidden"
+          className="relative bg-linear-to-br from-blue-500/30 to-blue-600/20 rounded-2xl p-6 border border-blue-400/30 overflow-hidden"
         >
           <div className="absolute top-0 right-0 text-6xl opacity-20">
             {data.leagueIcon}
@@ -50,7 +50,7 @@ export default function LeagueScreen({ data, onNext }: Props) {
           {/* Top 2 players (mock data) */}
           <div className="flex items-center gap-3 p-3 bg-white/5 rounded-xl">
             <span className="text-lg">🥇</span>
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-accent to-purple-500" />
+            <div className="w-10 h-10 rounded-full bg-linear-to-br from-accent to-purple-500" />
             <div className="flex-1">
               <p className="text-sm font-semibold">player_top1</p>
               <p className="text-xs text-white/40">32,450 MP</p>
@@ -58,7 +58,7 @@ export default function LeagueScreen({ data, onNext }: Props) {
           </div>
           <div className="flex items-center gap-3 p-3 bg-white/5 rounded-xl">
             <span className="text-lg">🥈</span>
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-600" />
+            <div className="w-10 h-10 rounded-full bg-linear-to-br from-blue-400 to-blue-600" />
             <div className="flex-1">
               <p className="text-sm font-semibold">player_top2</p>
               <p className="text-xs text-white/40">29,880 MP</p>
@@ -68,7 +68,7 @@ export default function LeagueScreen({ data, onNext }: Props) {
           {/* Current user */}
           <div className="flex items-center gap-3 p-3 bg-accent/20 rounded-xl border border-accent/30">
             <span className="text-lg">🏅</span>
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-accent to-orange-500" />
+            <div className="w-10 h-10 rounded-full bg-linear-to-br from-accent to-orange-500" />
             <div className="flex-1">
               <p className="text-sm font-semibold text-accent">You</p>
               <p className="text-xs text-white/60">

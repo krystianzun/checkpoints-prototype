@@ -19,7 +19,7 @@ export default function StreakScreen({ data, onNext }: Props) {
       exit={{ opacity: 0 }}
       className="relative flex flex-col h-full px-10 pt-12 pb-6 overflow-y-auto"
     >
-      <div className="absolute inset-0 bg-gradient-to-b from-purple-500/15 via-background to-background" />
+      <div className="absolute inset-0 bg-linear-to-b from-purple-500/15 via-background to-background" />
 
       <div className="relative z-10 flex flex-col flex-1 justify-center gap-8">
         <motion.p
