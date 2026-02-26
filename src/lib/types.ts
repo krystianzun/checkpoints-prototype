@@ -44,6 +44,12 @@ export interface CheckpointData {
   streakDays: number[];
   percentile: number;
   seasonAchievements: Achievement[];
+  // League progress
+  leagueName: string;
+  leagueRank: number;
+  leagueTotalPlayers: number;
+  leaguePointsToNextRank: number;
+  leagueIcon: string;
   // Plan reset - tag-based theming
   previousTag: BodyTag;
   upcomingTag: BodyTag;

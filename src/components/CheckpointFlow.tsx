@@ -17,11 +17,13 @@ import SummaryScreen from "./screens/SummaryScreen";
 import StatsScreen from "./screens/StatsScreen";
 import EffortScreen from "./screens/EffortScreen";
 import StreakScreen from "./screens/StreakScreen";
+import AchievementsScreen from "./screens/AchievementsScreen";
+import LeagueScreen from "./screens/LeagueScreen";
 import FocusScreen from "./screens/FocusScreen";
 import PlanScreen from "./screens/PlanScreen";
 import CompletionScreen from "./screens/CompletionScreen";
 
-const TOTAL_SCREENS = 9;
+const TOTAL_SCREENS = 11;
 
 export default function CheckpointFlow() {
   const [persona, setPersona] = useState<Persona>("power_user");
@@ -108,6 +110,12 @@ export default function CheckpointFlow() {
         return <StreakScreen key="streak" data={data} onNext={next} />;
       case 5:
         return (
+          <AchievementsScreen key="achievements" data={data} onNext={next} />
+        );
+      case 6:
+        return <LeagueScreen key="league" data={data} onNext={next} />;
+      case 7:
+        return (
           <WelcomeScreen
             key="welcome-plan"
             data={data}
@@ -115,11 +123,11 @@ export default function CheckpointFlow() {
             section="plan"
           />
         );
-      case 6:
-        return <FocusScreen key="focus" data={data} onNext={next} />;
-      case 7:
-        return <PlanScreen key="plan" data={data} onNext={next} />;
       case 8:
+        return <FocusScreen key="focus" data={data} onNext={next} />;
+      case 9:
+        return <PlanScreen key="plan" data={data} onNext={next} />;
+      case 10:
         return (
           <CompletionScreen key="completion" data={data} onRestart={restart} />
         );
@@ -129,9 +137,9 @@ export default function CheckpointFlow() {
   };
 
   const sectionLabel =
-    currentScreen <= 4
+    currentScreen <= 6
       ? "Wrapped Moment"
-      : currentScreen <= 7
+      : currentScreen <= 9
         ? "Plan Reset"
         : "Complete";
 

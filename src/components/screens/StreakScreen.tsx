@@ -78,39 +78,12 @@ export default function StreakScreen({ data, onNext }: Props) {
             </motion.div>
           ))}
         </motion.div>
-
-        {/* Season achievements */}
-        <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.8 }}
-          className="flex flex-col gap-2"
-        >
-          <p className="text-xs text-white/40 uppercase tracking-wider mb-1">
-            Season Achievements
-          </p>
-          {data.seasonAchievements.map((ach, i) => (
-            <motion.div
-              key={i}
-              initial={{ x: -20, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ delay: 0.9 + i * 0.1 }}
-              className="flex items-center gap-3 p-3 bg-surface-light/50 rounded-xl border border-white/5"
-            >
-              <span className="text-xl">{ach.icon}</span>
-              <div className="flex-1">
-                <p className="text-sm font-semibold">{ach.title}</p>
-                <p className="text-xs text-white/40">{ach.description}</p>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
       </div>
 
       <motion.button
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 1.2 }}
+        transition={{ delay: 0.8 }}
         onClick={onNext}
         className="relative z-10 w-12 h-12 ml-auto rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
       >
