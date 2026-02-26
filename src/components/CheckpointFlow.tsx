@@ -149,7 +149,7 @@ export default function CheckpointFlow() {
                 : "bg-white/10 text-white/50 hover:bg-white/15"
             }`}
           >
-            Power User
+            Regular User
           </button>
           <button
             onClick={() => switchPersona("new_user")}
@@ -159,7 +159,7 @@ export default function CheckpointFlow() {
                 : "bg-white/10 text-white/50 hover:bg-white/15"
             }`}
           >
-            New User (Post-Onboarding)
+            New User (First Checkpoint)
           </button>
         </div>
 
