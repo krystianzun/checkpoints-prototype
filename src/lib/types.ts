@@ -50,6 +50,7 @@ export interface CheckpointData {
   leagueTotalPlayers: number;
   leaguePointsToNextRank: number;
   leagueIcon: string;
+  leagueRankChange: number; // positive = climbed up, negative = dropped
   // Plan reset - tag-based theming
   previousTag: BodyTag;
   upcomingTag: BodyTag;

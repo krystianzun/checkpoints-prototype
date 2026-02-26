@@ -9,11 +9,6 @@ interface Props {
 }
 
 export default function LeagueScreen({ data, onNext }: Props) {
-  const progressPercentage = Math.max(
-    0,
-    Math.min(100, ((data.leagueTotalPlayers - data.leagueRank) / data.leagueTotalPlayers) * 100)
-  );
-
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -23,79 +18,85 @@ export default function LeagueScreen({ data, onNext }: Props) {
     >
       <div className="absolute inset-0 bg-gradient-to-b from-blue-500/15 via-background to-background" />
 
-      <div className="relative z-10 flex flex-col flex-1 justify-center gap-8">
-        <motion.p
-          initial={{ y: -10, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          className="text-sm text-white/50 text-center"
-        >
-          Your league standing this season
-        </motion.p>
-
+      <div className="relative z-10 flex flex-col flex-1 justify-center gap-6">
+        {/* League card */}
         <motion.div
-          initial={{ scale: 0.8, opacity: 0 }}
+          initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 0.2, type: "spring" }}
-          className="text-center"
+          className="relative bg-gradient-to-br from-blue-500/30 to-blue-600/20 rounded-2xl p-6 border border-blue-400/30 overflow-hidden"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/15 rounded-full border border-blue-400/20 mb-4">
-            <span className="text-blue-300 text-sm font-semibold">
-              {data.leagueIcon} {data.leagueName}
-            </span>
+          <div className="absolute top-0 right-0 text-6xl opacity-20">
+            {data.leagueIcon}
           </div>
-          <p className="text-6xl font-black text-accent">
-            #{data.leagueRank}
-          </p>
-          <p className="text-base text-white/50 mt-1">
-            out of {data.leagueTotalPlayers.toLocaleString()} players
-          </p>
+          <div className="relative z-10">
+            <p className="text-2xl font-black text-white uppercase tracking-wide">
+              {data.leagueName.replace(" League", "")}
+            </p>
+            <p className="text-3xl font-black text-white uppercase">LEAGUE</p>
+            <p className="text-sm text-white/60 mt-2">
+              Your position {data.leagueRank}/{data.leagueTotalPlayers}
+            </p>
+          </div>
         </motion.div>
 
-        {/* Progress bar */}
+        {/* Leaderboard preview */}
         <motion.div
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.4 }}
-          className="flex flex-col gap-3"
+          className="flex flex-col gap-2"
         >
-          <div className="relative h-3 bg-white/5 rounded-full overflow-hidden">
-            <motion.div
-              initial={{ width: 0 }}
-              animate={{ width: `${progressPercentage}%` }}
-              transition={{ delay: 0.6, duration: 0.8, ease: "easeOut" }}
-              className="absolute inset-y-0 left-0 bg-gradient-to-r from-blue-500 to-accent rounded-full"
-            />
+          {/* Top 2 players (mock data) */}
+          <div className="flex items-center gap-3 p-3 bg-white/5 rounded-xl">
+            <span className="text-lg">🥇</span>
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-accent to-purple-500" />
+            <div className="flex-1">
+              <p className="text-sm font-semibold">player_top1</p>
+              <p className="text-xs text-white/40">32,450 MP</p>
+            </div>
           </div>
-          <div className="flex items-center justify-between text-xs">
-            <span className="text-white/40">
-              Top {Math.round(progressPercentage)}%
-            </span>
-            <span className="text-white/60 font-medium">
-              {data.leaguePointsToNextRank} pts to next rank
-            </span>
+          <div className="flex items-center gap-3 p-3 bg-white/5 rounded-xl">
+            <span className="text-lg">🥈</span>
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-600" />
+            <div className="flex-1">
+              <p className="text-sm font-semibold">player_top2</p>
+              <p className="text-xs text-white/40">29,880 MP</p>
+            </div>
+          </div>
+
+          {/* Current user */}
+          <div className="flex items-center gap-3 p-3 bg-accent/20 rounded-xl border border-accent/30">
+            <span className="text-lg">🏅</span>
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-accent to-orange-500" />
+            <div className="flex-1">
+              <p className="text-sm font-semibold text-accent">You</p>
+              <p className="text-xs text-white/60">
+                {data.movePoints.toLocaleString()} MP
+              </p>
+            </div>
           </div>
         </motion.div>
 
-        {/* League info */}
+        {/* Motivational copy */}
         <motion.div
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.8 }}
-          className="p-4 bg-surface-light/50 rounded-xl border border-white/5"
+          transition={{ delay: 0.6 }}
+          className="text-center"
         >
-          <p className="text-xs text-white/40 uppercase tracking-wider mb-2">
-            How leagues work
-          </p>
-          <p className="text-sm text-white/60 leading-relaxed">
-            Compete with players worldwide based on your Move Points. Complete workouts to climb the ranks and unlock exclusive rewards.
-          </p>
+          {data.leagueRankChange > 0 && (
+            <p className="text-sm text-green-400 mt-3">
+              ↑ You climbed {data.leagueRankChange} places this chapter!
+            </p>
+          )}
         </motion.div>
       </div>
 
       <motion.button
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 1.0 }}
+        transition={{ delay: 0.8 }}
         onClick={onNext}
         className="relative z-10 w-12 h-12 ml-auto rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
       >
