@@ -3,6 +3,7 @@
 import { useState, useCallback } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { CheckpointData, Persona, Goal } from "@/lib/types";
+import { useTheme } from "@/contexts/ThemeContext";
 import {
   powerUserData,
   newUserData,
@@ -26,6 +27,7 @@ import CompletionScreen from "./screens/CompletionScreen";
 const TOTAL_SCREENS = 11;
 
 export default function CheckpointFlow() {
+  const { theme, toggle } = useTheme();
   const [persona, setPersona] = useState<Persona>("power_user");
   const [goal, setGoal] = useState<Goal>("Lose Weight");
   const [currentScreen, setCurrentScreen] = useState(0);
@@ -144,7 +146,18 @@ export default function CheckpointFlow() {
         : "Complete";
 
   return (
-    <div className="flex flex-col items-center gap-8">
+    <div className="relative flex flex-col items-center gap-8">
+      {/* Theme toggle */}
+      <div className="absolute top-4 right-4">
+        <button
+          onClick={toggle}
+          className="px-3 py-1.5 rounded-full text-xs font-medium bg-white/10 text-white/50 hover:bg-white/15 transition-all"
+          aria-label="Toggle light/dark mode"
+        >
+          {theme === "dark" ? "Light mode" : "Dark mode"}
+        </button>
+      </div>
+
       {/* Persona and Goal switchers */}
       <div className="flex flex-col items-center gap-4">
         {/* Persona switcher */}
