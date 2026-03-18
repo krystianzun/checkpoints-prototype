@@ -1,0 +1,1620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkpoints — Data Logic</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #080b12;
+      --bg2: #0f1420;
+      --bg3: #161d2e;
+      --border: rgba(255,255,255,0.07);
+      --border-bright: rgba(255,255,255,0.14);
+      --text: #e8edf5;
+      --muted: #7a8499;
+      --blue: #3d8bff;
+      --blue-glow: rgba(61,139,255,0.15);
+      --coral: #ff5f3d;
+      --coral-glow: rgba(255,95,61,0.15);
+      --green: #2ecc71;
+      --green-glow: rgba(46,204,113,0.12);
+      --amber: #f5a623;
+      --amber-glow: rgba(245,166,35,0.12);
+      --purple: #a855f7;
+      --purple-glow: rgba(168,85,247,0.12);
+      --cyan: #22d3ee;
+      --font: 'Space Grotesk', sans-serif;
+      --mono: 'JetBrains Mono', monospace;
+      --sidebar-w: 260px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ── SIDEBAR ── */
+    aside {
+      width: var(--sidebar-w);
+      min-height: 100vh;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      background: var(--bg2);
+      border-right: 1px solid var(--border);
+      flex-shrink: 0;
+      padding: 32px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    aside::-webkit-scrollbar { width: 4px; }
+    aside::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 4px; }
+    .sidebar-logo {
+      padding: 0 24px 24px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 16px;
+    }
+    .sidebar-logo .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--blue-glow);
+      border: 1px solid rgba(61,139,255,0.3);
+      border-radius: 100px;
+      padding: 4px 12px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--blue);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .sidebar-logo h1 { font-size: 16px; font-weight: 700; color: var(--text); }
+    .sidebar-logo p { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+    .nav-section { padding: 8px 24px 4px; font-size: 10px; font-weight: 700; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 24px;
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
+      border-radius: 0;
+      transition: color 0.15s, background 0.15s;
+      position: relative;
+    }
+    .nav-link:hover { color: var(--text); background: rgba(255,255,255,0.03); }
+    .nav-link.active { color: var(--blue); background: var(--blue-glow); }
+    .nav-link.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--blue);
+      border-radius: 0 2px 2px 0;
+    }
+    .nav-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: 0.5; flex-shrink: 0; }
+
+    /* ── MAIN CONTENT ── */
+    main {
+      flex: 1;
+      min-width: 0;
+      padding: 64px 80px;
+      max-width: 900px;
+    }
+
+    /* ── TYPOGRAPHY ── */
+    h2 {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+      scroll-margin-top: 40px;
+    }
+    h3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 12px;
+      scroll-margin-top: 40px;
+    }
+    h4 { font-size: 14px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; }
+    p { color: var(--muted); font-size: 14px; line-height: 1.7; margin-bottom: 16px; }
+    section { margin-bottom: 80px; }
+    .section-intro { font-size: 15px; color: var(--muted); line-height: 1.7; margin-bottom: 32px; max-width: 640px; }
+
+    code {
+      font-family: var(--mono);
+      font-size: 12px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1px 6px;
+      color: var(--cyan);
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 48px 0;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      margin-bottom: 64px;
+    }
+    .hero-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--blue-glow);
+      border: 1px solid rgba(61,139,255,0.3);
+      border-radius: 100px;
+      padding: 5px 14px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--blue);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .hero h1 { font-size: 42px; font-weight: 800; line-height: 1.15; letter-spacing: -0.02em; margin-bottom: 16px; }
+    .hero h1 span { color: var(--blue); }
+    .hero p { font-size: 16px; max-width: 560px; }
+    .hero-stats {
+      display: flex;
+      gap: 32px;
+      margin-top: 32px;
+    }
+    .hero-stat { display: flex; flex-direction: column; gap: 2px; }
+    .hero-stat .n { font-size: 28px; font-weight: 800; color: var(--text); }
+    .hero-stat .l { font-size: 12px; color: var(--muted); }
+
+    /* ── SCREEN FLOW ── */
+    .flow-section { margin-bottom: 48px; }
+    .flow-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 12px;
+    }
+    .flow-label.wrapped { color: var(--blue); }
+    .flow-label.plan { color: var(--coral); }
+    .flow-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 8px;
+    }
+    .flow-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+      position: relative;
+      transition: border-color 0.2s, transform 0.2s;
+      cursor: default;
+    }
+    .flow-card:hover { border-color: var(--border-bright); transform: translateY(-1px); }
+    .flow-card.wrapped { border-top: 2px solid var(--blue); }
+    .flow-card.plan { border-top: 2px solid var(--coral); }
+    .flow-card .num {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .flow-card.wrapped .num { color: var(--blue); }
+    .flow-card.plan .num { color: var(--coral); }
+    .flow-card .name { font-size: 13px; font-weight: 600; color: var(--text); }
+    .flow-card .sub { font-size: 11px; color: var(--muted); margin-top: 3px; }
+
+    /* ── DATA HIERARCHY ── */
+    .hierarchy {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 24px;
+    }
+    .h-node {
+      display: flex;
+      align-items: flex-start;
+      gap: 0;
+      margin-bottom: 0;
+    }
+    .h-level { display: flex; flex-direction: column; gap: 0; }
+    .h-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: 10px;
+      margin-bottom: 4px;
+      transition: background 0.15s;
+    }
+    .h-item:hover { background: rgba(255,255,255,0.04); }
+    .h-badge {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 6px;
+      flex-shrink: 0;
+      min-width: 80px;
+      text-align: center;
+    }
+    .h-badge.chapter { background: rgba(168,85,247,0.15); color: var(--purple); border: 1px solid rgba(168,85,247,0.3); }
+    .h-badge.day { background: var(--blue-glow); color: var(--blue); border: 1px solid rgba(61,139,255,0.3); }
+    .h-badge.workout { background: var(--coral-glow); color: var(--coral); border: 1px solid rgba(255,95,61,0.3); }
+    .h-badge.class { background: var(--green-glow); color: var(--green); border: 1px solid rgba(46,204,113,0.3); }
+    .h-desc { font-size: 13px; color: var(--muted); }
+    .h-desc strong { color: var(--text); font-weight: 500; }
+    .h-connector {
+      width: 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 4px;
+      margin-bottom: 4px;
+      flex-shrink: 0;
+    }
+    .h-tree {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .h-row {
+      display: flex;
+      align-items: flex-start;
+    }
+    .h-indent { display: flex; flex-direction: column; gap: 2px; margin-left: 24px; padding-left: 16px; border-left: 1px dashed var(--border-bright); }
+
+    /* ── TABLES ── */
+    .table-wrap { overflow-x: auto; margin-bottom: 24px; border-radius: 12px; border: 1px solid var(--border); }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    thead th {
+      background: var(--bg3);
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: rgba(255,255,255,0.02); }
+    tbody td { padding: 10px 16px; color: var(--muted); vertical-align: top; }
+    tbody td:first-child { color: var(--text); font-family: var(--mono); font-size: 12px; }
+    .td-note { font-size: 11px; color: var(--muted); }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      font-family: var(--mono);
+    }
+    .tag.blue { background: var(--blue-glow); color: var(--blue); }
+    .tag.coral { background: var(--coral-glow); color: var(--coral); }
+    .tag.green { background: var(--green-glow); color: var(--green); }
+    .tag.amber { background: var(--amber-glow); color: var(--amber); }
+    .tag.purple { background: var(--purple-glow); color: var(--purple); }
+
+    /* ── SCREEN DETAIL CARDS ── */
+    .screen-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 20px;
+    }
+    .screen-card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .screen-num {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--mono);
+      font-size: 14px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .screen-num.wrapped { background: var(--blue-glow); color: var(--blue); border: 1px solid rgba(61,139,255,0.3); }
+    .screen-num.plan { background: var(--coral-glow); color: var(--coral); border: 1px solid rgba(255,95,61,0.3); }
+    .screen-card-header .title { font-size: 16px; font-weight: 600; }
+    .screen-card-header .section-tag {
+      margin-left: auto;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+    .screen-card-header .section-tag.wrapped { background: var(--blue-glow); color: var(--blue); }
+    .screen-card-header .section-tag.plan { background: var(--coral-glow); color: var(--coral); }
+    .screen-card p { margin-bottom: 12px; }
+    .static-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--green-glow);
+      border: 1px solid rgba(46,204,113,0.25);
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 12px;
+      color: var(--green);
+      font-weight: 500;
+    }
+    .condition-block {
+      background: var(--bg3);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin: 12px 0;
+      border-left: 3px solid var(--amber);
+    }
+    .condition-block .condition-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--amber);
+      margin-bottom: 8px;
+    }
+    .condition-block ul { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+    .condition-block li { font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+    .condition-block li::before { content: '→'; color: var(--amber); font-family: var(--mono); }
+
+    /* ── ALGORITHM FLOW ── */
+    .algo-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      position: relative;
+      padding-left: 44px;
+    }
+    .algo-steps::before {
+      content: '';
+      position: absolute;
+      left: 15px;
+      top: 24px;
+      bottom: 24px;
+      width: 1px;
+      background: var(--border-bright);
+    }
+    .algo-step {
+      position: relative;
+      padding: 16px 0 24px;
+    }
+    .algo-step-num {
+      position: absolute;
+      left: -44px;
+      top: 12px;
+      width: 30px;
+      height: 30px;
+      background: var(--bg3);
+      border: 1px solid var(--border-bright);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--blue);
+      z-index: 1;
+    }
+    .algo-step h4 { color: var(--text); font-size: 14px; font-weight: 600; text-transform: none; letter-spacing: normal; margin-bottom: 6px; }
+    .algo-step p { margin-bottom: 0; font-size: 13px; }
+
+    /* ── FORMULA BLOCK ── */
+    .formula {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 18px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--cyan);
+      margin: 10px 0 16px;
+      line-height: 1.8;
+    }
+    .formula .comment { color: var(--muted); }
+
+    /* ── OPEN Q ── */
+    .oq-list { display: flex; flex-direction: column; gap: 10px; }
+    .oq-item {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 20px;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      transition: border-color 0.2s;
+    }
+    .oq-item:hover { border-color: var(--amber); }
+    .oq-num {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--amber);
+      background: var(--amber-glow);
+      border: 1px solid rgba(245,166,35,0.25);
+      border-radius: 6px;
+      padding: 2px 8px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .oq-item h4 { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; text-transform: none; letter-spacing: normal; }
+    .oq-item p { font-size: 12px; margin-bottom: 0; }
+    .oq-blocker {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--coral);
+      background: var(--coral-glow);
+      border: 1px solid rgba(255,95,61,0.25);
+      border-radius: 4px;
+      padding: 1px 7px;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+
+    /* ── HIGHLIGHT GRID ── */
+    .highlight-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    .highlight-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      transition: border-color 0.2s;
+    }
+    .highlight-card:hover { border-color: var(--border-bright); }
+    .highlight-card .hid {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--blue);
+      margin-bottom: 4px;
+    }
+    .highlight-card .hlabel { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+    .highlight-card .hgrain {
+      font-size: 11px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .grain-pill {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 1px 7px;
+      border-radius: 4px;
+    }
+    .grain-pill.class { background: var(--green-glow); color: var(--green); }
+    .grain-pill.workout { background: var(--coral-glow); color: var(--coral); }
+    .grain-pill.day { background: var(--blue-glow); color: var(--blue); }
+    .grain-pill.chapter { background: var(--purple-glow); color: var(--purple); }
+    .highlight-type {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-bottom: 8px;
+      display: inline-block;
+    }
+    .highlight-type.all { background: rgba(255,255,255,0.06); color: var(--muted); }
+    .highlight-type.punch { background: var(--coral-glow); color: var(--coral); }
+    .highlight-type.fitness { background: var(--purple-glow); color: var(--purple); }
+
+    /* ── PLAN LOGIC ── */
+    .plan-decision {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 16px;
+    }
+    .plan-decision h4 { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 14px; text-transform: none; letter-spacing: normal; }
+    .decision-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .decision-row:last-child { border-bottom: none; }
+    .decision-cond {
+      min-width: 200px;
+      font-size: 12px;
+      color: var(--muted);
+      font-family: var(--mono);
+    }
+    .decision-arrow { color: var(--blue); font-family: var(--mono); font-size: 14px; margin-top: 1px; }
+    .decision-val { font-size: 13px; color: var(--text); font-weight: 500; }
+
+    /* ── MAPPING TABLE ── */
+    .mapping-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+    .mapping-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+    }
+    .mapping-from {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--cyan);
+      min-width: 70px;
+    }
+    .mapping-arrow { color: var(--muted); font-size: 12px; }
+    .mapping-to { font-size: 12px; color: var(--text); font-weight: 500; }
+
+    /* ── INFO BOXES ── */
+    .info-box {
+      background: var(--bg2);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin: 16px 0;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      font-size: 13px;
+    }
+    .info-box.note { border-left: 3px solid var(--blue); }
+    .info-box.warn { border-left: 3px solid var(--amber); }
+    .info-box.blocker { border-left: 3px solid var(--coral); }
+    .info-box-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+    .info-box p { font-size: 13px; margin-bottom: 0; }
+    .info-box strong { color: var(--text); }
+
+    /* ── THRESHOLD TABLE ── */
+    .threshold-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .t-bar {
+      height: 4px;
+      border-radius: 2px;
+      background: var(--blue);
+      opacity: 0.6;
+    }
+
+    @media (max-width: 900px) {
+      aside { display: none; }
+      main { padding: 40px 24px; max-width: 100%; }
+      .highlight-grid { grid-template-columns: 1fr; }
+      .mapping-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside id="sidebar">
+  <div class="sidebar-logo">
+    <div class="pill">Docs</div>
+    <h1>Checkpoints</h1>
+    <p>Data Logic Reference</p>
+  </div>
+
+  <div class="nav-section">Overview</div>
+  <a href="#screen-flow" class="nav-link"><span class="nav-dot"></span>Screen Flow</a>
+  <a href="#data-hierarchy" class="nav-link"><span class="nav-dot"></span>Data Hierarchy</a>
+  <a href="#data-sources" class="nav-link"><span class="nav-dot"></span>Data Sources</a>
+  <a href="#derived-aggregates" class="nav-link"><span class="nav-dot"></span>Derived Aggregates</a>
+
+  <div class="nav-section" style="margin-top:8px">Wrapped Moment</div>
+  <a href="#s0" class="nav-link"><span class="nav-dot"></span>0 · Welcome</a>
+  <a href="#s1" class="nav-link"><span class="nav-dot"></span>1 · Stats</a>
+  <a href="#highlight-logic" class="nav-link"><span class="nav-dot"></span>&nbsp;&nbsp;↳ Highlight Logic</a>
+  <a href="#s2" class="nav-link"><span class="nav-dot"></span>2 · Effort</a>
+  <a href="#s3" class="nav-link"><span class="nav-dot"></span>3 · Achievements</a>
+  <a href="#s4" class="nav-link"><span class="nav-dot"></span>4 · Streak</a>
+  <a href="#s5" class="nav-link"><span class="nav-dot"></span>5 · League</a>
+
+  <div class="nav-section" style="margin-top:8px">Plan Reset</div>
+  <a href="#s6" class="nav-link"><span class="nav-dot"></span>6 · Welcome</a>
+  <a href="#s7" class="nav-link"><span class="nav-dot"></span>7 · Intensity</a>
+  <a href="#s8" class="nav-link"><span class="nav-dot"></span>8 · Plan</a>
+  <a href="#s9" class="nav-link"><span class="nav-dot"></span>9 · Completion</a>
+
+  <div class="nav-section" style="margin-top:8px">Reference</div>
+  <a href="#open-questions" class="nav-link"><span class="nav-dot"></span>Open Questions</a>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-pill">Source of Truth</div>
+    <h1>Checkpoints<br><span>Data Logic</span></h1>
+    <p class="section-intro">Defines what data each screen shows, where it comes from, and how we compute it. Use this as the canonical reference when iterating on the prototype.</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><span class="n">10</span><span class="l">Screens</span></div>
+      <div class="hero-stat"><span class="n">2</span><span class="l">Sections</span></div>
+      <div class="hero-stat"><span class="n">20</span><span class="l">Highlight candidates</span></div>
+      <div class="hero-stat"><span class="n">12</span><span class="l">Open questions</span></div>
+    </div>
+  </div>
+
+  <!-- SCREEN FLOW -->
+  <section id="screen-flow">
+    <h2>Screen Flow</h2>
+    <p class="section-intro">The checkpoint experience is split into two sections: <strong style="color:var(--blue)">Wrapped Moment</strong> celebrates the user's past chapter, then <strong style="color:var(--coral)">Plan Reset</strong> sets up the next one.</p>
+
+    <div class="flow-section">
+      <div class="flow-label wrapped">Wrapped Moment — Screens 0–5</div>
+      <div class="flow-cards">
+        <div class="flow-card wrapped">
+          <div class="num">00</div>
+          <div class="name">Welcome</div>
+          <div class="sub">Celebrate</div>
+        </div>
+        <div class="flow-card wrapped">
+          <div class="num">01</div>
+          <div class="name">Stats</div>
+          <div class="sub">Classes + highlight</div>
+        </div>
+        <div class="flow-card wrapped">
+          <div class="num">02</div>
+          <div class="name">Effort</div>
+          <div class="sub">Time, MP, calories</div>
+        </div>
+        <div class="flow-card wrapped">
+          <div class="num">03</div>
+          <div class="name">Achievements</div>
+          <div class="sub">Milestones</div>
+        </div>
+        <div class="flow-card wrapped">
+          <div class="num">04</div>
+          <div class="name">Streak</div>
+          <div class="sub">Calendar grid</div>
+        </div>
+        <div class="flow-card wrapped">
+          <div class="num">05</div>
+          <div class="name">League</div>
+          <div class="sub">Rank + leaderboard</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-section">
+      <div class="flow-label plan">Plan Reset — Screens 6–9</div>
+      <div class="flow-cards">
+        <div class="flow-card plan">
+          <div class="num">06</div>
+          <div class="name">Welcome</div>
+          <div class="sub">Plan</div>
+        </div>
+        <div class="flow-card plan">
+          <div class="num">07</div>
+          <div class="name">Intensity</div>
+          <div class="sub">Suggestion</div>
+        </div>
+        <div class="flow-card plan">
+          <div class="num">08</div>
+          <div class="name">Plan</div>
+          <div class="sub">Editable items</div>
+        </div>
+        <div class="flow-card plan">
+          <div class="num">09</div>
+          <div class="name">Completion</div>
+          <div class="sub">Confirmed plan</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- DATA HIERARCHY -->
+  <section id="data-hierarchy">
+    <h2>Data Hierarchy</h2>
+    <p class="section-intro">There are four levels at which session data is aggregated. Higher levels are derived by rolling up lower levels.</p>
+
+    <div class="hierarchy">
+      <div class="h-tree">
+        <div class="h-item">
+          <span class="h-badge chapter">Chapter</span>
+          <span class="h-desc"><strong>Full window</strong> of sessions since the last checkpoint. All days combined.</span>
+        </div>
+        <div class="h-indent">
+          <div class="h-item">
+            <span class="h-badge day">Day</span>
+            <span class="h-desc"><strong>All sessions</strong> on a given calendar date — includes path workouts + explore (freeplay).</span>
+          </div>
+          <div class="h-indent">
+            <div class="h-item">
+              <span class="h-badge workout">Workout</span>
+              <span class="h-desc"><strong>1–3 classes</strong> from the user's structured daily path. Requires workout identifier field <span class="oq-blocker">OPEN Q</span></span>
+            </div>
+            <div class="h-indent">
+              <div class="h-item">
+                <span class="h-badge class">Class</span>
+                <span class="h-desc"><strong>Single session.</strong> One row in the session CSV. All raw fields available.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-box blocker">
+      <div class="info-box-icon">🚧</div>
+      <p><strong>Workout grouping is blocked.</strong> There's no <code>workoutId</code> field in the current CSV. Workout-level highlights (H3, H6, H10) cannot be computed until this is resolved. See Open Question #1.</p>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- DATA SOURCES -->
+  <section id="data-sources">
+    <h2>Data Sources</h2>
+    <p class="section-intro">All per-session fields come from the raw session CSV. Cross-chapter comparisons use the equivalent window from the previous chapter.</p>
+
+    <h3>Session-level fields (from CSV)</h3>
+
+    <h4 style="margin-top:20px">Identity & core metrics</h4>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Field</th><th>Type</th><th>Notes</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>profileId</td><td><span class="tag blue">string</span></td><td>User identifier</td></tr>
+          <tr><td>dateCreation</td><td><span class="tag blue">Unix timestamp</span></td><td>Session date — use for <code>"Jan 23rd"</code> formatting. Timezone TBD.</td></tr>
+          <tr><td>classId</td><td><span class="tag blue">string</span></td><td>Specific class played</td></tr>
+          <tr><td>classType</td><td><span class="tag blue">string</span></td><td><code>Punch</code> · <code>Combat</code> · <code>Hiit</code> · <code>Aero</code> · <code>Sculpt</code> · <code>Dance</code></td></tr>
+          <tr><td>time</td><td><span class="tag green">number (s)</span></td><td>Session duration in seconds</td></tr>
+          <tr><td>calories</td><td><span class="tag green">number</span></td><td>kcal burned in session</td></tr>
+          <tr><td>points</td><td><span class="tag green">number</span></td><td>Move Points earned in session</td></tr>
+          <tr><td>medal</td><td><span class="tag amber">number</span></td><td>1=none · 2=bronze · 3=silver · 4=gold</td></tr>
+          <tr><td>classesCompleted</td><td><span class="tag green">number</span></td><td>Always 1 per session row</td></tr>
+          <tr><td>handTrackingPercent</td><td><span class="tag green">number</span></td><td>Hand tracking quality — direction unclear <span class="oq-blocker">OPEN Q</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 style="margin-top:24px">Combo streaks</h4>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Field</th><th>Type</th><th>Notes</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>bestExplosiveStreak</td><td><span class="tag green">number</span></td><td rowspan="4">Best combo in session. Semantics may differ by class mode. <span class="oq-blocker">OPEN Q</span></td></tr>
+          <tr><td>bestLegacyStreak</td><td><span class="tag green">number</span></td></tr>
+          <tr><td>bestLightningStreak</td><td><span class="tag green">number</span></td></tr>
+          <tr><td>bestDanceStreak</td><td><span class="tag green">number</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 style="margin-top:24px">Speed metrics</h4>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Field</th><th>Type</th><th>Notes</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>maxPunchSpeed</td><td><span class="tag green">number (km/h)</span></td><td>Fastest single punch in session</td></tr>
+          <tr><td>averagePunchSpeed</td><td><span class="tag green">number (km/h)</span></td><td>Average punch speed in session</td></tr>
+          <tr><td>averageReactionTime</td><td><span class="tag green">number (ms)</span></td><td>Average reaction time — lower is better</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 style="margin-top:24px">Strike types (Punch / Combat only)</h4>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Field</th><th>Notes</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>jabsHitLeft / jabsHitRight</td><td>Jabs landed per hand</td></tr>
+          <tr><td>hooksHitLeft / hooksHitRight</td><td>Hooks landed per hand</td></tr>
+          <tr><td>uppercutsHitLeft / uppercutsHitRight</td><td>Uppercuts per hand</td></tr>
+          <tr><td>doublePunchesHit</td><td>Double punches landed</td></tr>
+          <tr><td>hammerStrikesHitLeft / hammerStrikesHitRight</td><td>Hammer strikes per hand</td></tr>
+          <tr><td>elbowStrikesHitLeft / elbowStrikesHitRight</td><td>Elbow strikes per hand</td></tr>
+          <tr><td>powerMoves</td><td>Power moves landed</td></tr>
+          <tr><td>blocksHit</td><td>Blocks landed</td></tr>
+          <tr><td>risingBlocksHitLeft / risingBlocksHitRight</td><td>Rising blocks per hand</td></tr>
+          <tr><td>slipsHitLeft / slipsHitRight</td><td>Slips/dodges per side</td></tr>
+          <tr><td>longAvoidsHitLeft / longAvoidsHitMiddle / longAvoidsHitRight</td><td>Long dodge moves</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 style="margin-top:24px">Body movement (Hiit / Aero / Sculpt / Dance only)</h4>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Field</th><th>Notes</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>jumpsHit</td><td>Jumps landed</td></tr>
+          <tr><td>squatsHit</td><td>Squats hit</td></tr>
+          <tr><td>stepsHitLeft / stepsHitRight</td><td>Footwork steps per side</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 style="margin-top:24px">Accuracy ratings</h4>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Field</th><th>Notes</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>almostsPerformed</td><td>Near-miss attempts — signal of push effort <span class="oq-blocker">OPEN Q</span></td></tr>
+          <tr><td>goodsPerformed</td><td>"Good" accuracy ratings</td></tr>
+          <tr><td>totalBestMoves</td><td>Total best-rated moves in session</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- DERIVED AGGREGATES -->
+  <section id="derived-aggregates">
+    <h2>Derived Aggregates</h2>
+    <p class="section-intro">Higher-level metrics are computed by rolling up raw session fields. Class-level is always raw — no derivation needed.</p>
+
+    <h3>Workout level</h3>
+    <p>Group sessions by workout ID (TBD). Sum or max across the 1–3 classes in that workout.</p>
+    <div class="formula">
+      workout.calories    = sum(calories) across classes in workout<br>
+      workout.minutes     = sum(time) / 60 across classes in workout<br>
+      workout.movePoints  = sum(points) across classes in workout<br>
+      workout.totalPunches = sum(all punch fields) across classes in workout
+    </div>
+
+    <h3>Day level</h3>
+    <p>Group sessions by calendar date from <code>dateCreation</code>. Sum across all classes that day.</p>
+    <div class="formula">
+      day.calories    = sum(calories) — all sessions on that date<br>
+      day.minutes     = sum(time) / 60 — all sessions on that date<br>
+      day.movePoints  = sum(points) — all sessions on that date<br>
+      day.sessionCount = count of sessions on that date
+    </div>
+
+    <h3>Chapter level</h3>
+    <p>Aggregate across the full chapter window (all sessions since last checkpoint).</p>
+    <div class="formula">
+      classesCompleted   = count of session rows in chapter<br>
+      workoutsCompleted  = count of distinct workouts in chapter<br>
+      totalMinutes       = sum(time) / 60<br>
+      caloriesBurned     = sum(calories)<br>
+      movePoints         = sum(points)<br>
+      sessionsByClassType = group by classType, sort by count desc<br>
+      streakDays         = binary array: 1 for each day with ≥1 session<br>
+      streakWeeks        = longest run of 7-day windows with ≥ N active days
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ═══ SCREENS ═══ -->
+
+  <!-- S0 -->
+  <section id="s0">
+    <div class="screen-card">
+      <div class="screen-card-header">
+        <div class="screen-num wrapped">00</div>
+        <div class="title">Welcome — Celebrate</div>
+        <div class="section-tag wrapped">Wrapped Moment</div>
+      </div>
+      <p>Full-screen background photo. All content is static — no computed data needed on this screen.</p>
+      <div class="static-badge">✓ No data required</div>
+      <div class="table-wrap" style="margin-top:16px">
+        <table>
+          <thead><tr><th>Element</th><th>Value</th></tr></thead>
+          <tbody>
+            <tr><td>Header pill</td><td>"Checkpoint"</td></tr>
+            <tr><td>Headline</td><td>"Let's celebrate your progress!"</td></tr>
+            <tr><td>Sub-copy</td><td>"Let's take a look at what you've accomplished and what's ahead."</td></tr>
+            <tr><td>CTA</td><td>"Celebrate"</td></tr>
+            <tr><td>Secondary</td><td>"SKIP" — jumps to end of Wrapped Moment</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- S1 -->
+  <section id="s1">
+    <div class="screen-card">
+      <div class="screen-card-header">
+        <div class="screen-num wrapped">01</div>
+        <div class="title">Stats — Classes + Highlight</div>
+        <div class="section-tag wrapped">Wrapped Moment</div>
+      </div>
+      <p>Shows how many classes were completed this chapter with a delta vs last chapter, plus one standout highlight moment.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Element</th><th>Variable</th><th>Logic</th></tr></thead>
+          <tbody>
+            <tr><td>Classes completed</td><td><code>classesCompleted</code></td><td>Count of session rows in chapter</td></tr>
+            <tr><td>Delta badge</td><td><code>classesCompleted - previousClassesCompleted</code></td><td>Shown only if <code>previousClassesCompleted &gt; 0</code></td></tr>
+            <tr><td>Highlight value</td><td><code>highlight.value</code></td><td>See Highlight Logic below</td></tr>
+            <tr><td>Highlight label</td><td><code>highlight.label</code></td><td>See Highlight Logic below</td></tr>
+            <tr><td>Highlight sub-label</td><td><code>highlight.subLabel</code></td><td><code>"{classType}, {date}"</code> of that session</td></tr>
+            <tr><td>Goal reminder</td><td><code>goal</code></td><td>From user profile</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="info-box note">
+        <div class="info-box-icon">ℹ</div>
+        <p><strong>Delta format:</strong> <code>↑ {N} more than last chapter</code><br>
+        <strong>First chapter:</strong> No delta shown. Highlight uses "First class" variant — shows label <code>"First Class Complete"</code>, no numeric value.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HIGHLIGHT LOGIC -->
+  <section id="highlight-logic">
+    <h2>Highlight Logic</h2>
+    <p class="section-intro">The highlight is the single most impressive, concrete number from the chapter. It must feel like a specific memory, not a summary metric.</p>
+
+    <div class="info-box note">
+      <div class="info-box-icon">💡</div>
+      <p><strong>What makes a good highlight:</strong> Concrete and human-readable (<code>312 punches</code>, not <code>performance score 72.4</code>). Specific to a session. Varies across checkpoints so it doesn't go stale.</p>
+    </div>
+
+    <h3 style="margin-top:32px">Candidate library</h3>
+    <p>Candidates are split by which class types they apply to.</p>
+
+    <h4 style="margin-top: 20px">Available for all class types</h4>
+    <div class="highlight-grid">
+      <div class="highlight-card">
+        <div class="hid">H1</div>
+        <div class="highlight-type all">All types</div>
+        <div class="hlabel">Highest Combo</div>
+        <div class="hgrain"><span class="grain-pill class">Class</span> Threshold: 400</div>
+      </div>
+      <div class="highlight-card">
+        <div class="hid">H2</div>
+        <div class="highlight-type all">All types</div>
+        <div class="hlabel">Move Points in One Class</div>
+        <div class="hgrain"><span class="grain-pill class">Class</span> Threshold: 3,500 MP</div>
+      </div>
+      <div class="highlight-card">
+        <div class="hid">H3</div>
+        <div class="highlight-type all">All types</div>
+        <div class="hlabel">Move Points in One Workout</div>
+        <div class="hgrain"><span class="grain-pill workout">Workout</span> Threshold: 7,000 MP <span class="oq-blocker">BLOCKED</span></div>
+      </div>
+      <div class="highlight-card">
+        <div class="hid">H4</div>
+        <div class="highlight-type all">All types</div>
+        <div class="hlabel">Move Points in One Day</div>
+        <div class="hgrain"><span class="grain-pill day">Day</span> Threshold: 10,000 MP</div>
+      </div>
+      <div class="highlight-card">
+        <div class="hid">H5</div>
+        <div class="highlight-type all">All types</div>
+        <div class="hlabel">Calories in One Class</div>
+        <div class="hgrain"><span class="grain-pill class">Class</span> Threshold: 70 kcal</div>
+      </div>
+      <div class="highlight-card">
+        <div class="hid">H6</div>
+        <div class="highlight-type all">All types</div>
+        <div class="hlabel">Calories in One Workout</div>
+        <div class="hgrain"><span class="grain-pill workout">Workout</span> Threshold: 150 kcal <span class="oq-blocker">BLOCKED</span></div>
+      </div>
+      <div class="highlight-card">
+        <div class="hid">H7</div>
+        <div class="highlight-type all">All types</div>
+        <div class="hlabel">Calories in One Day</div>
+        <div class="hgrain"><span class="grain-pill day">Day</span> Threshold: 220 kcal</div>
+      </div>
+      <div class="highlight-card">
+        <div class="hid">H8</div>
+        <div class="highlight-type all">All types</div>
+        <div class="hlabel">Longest Session</div>
+        <div class="hgrain"><span class="grain-pill class">Class</span> Threshold: 25 min</div>
+      </div>
+    </div>
+
+    <h4 style="margin-top: 20px">Punch / Combat only</h4>
+    <div class="highlight-grid">
+      <div class="highlight-card">
+        <div class="hid">H9</div>
+        <div class="highlight-type punch">Punch · Combat</div>
+        <div class="hlabel">Punches in One Class</div>
+        <div class="hgrain"><span class="grain-pill class">Class</span> Threshold: 150</div>
+      </div>
+      <div class="highlight-card">
+        <div class="hid">H10</div>
+        <div class="highlight-type punch">Punch · Combat</div>
+        <div class="hlabel">Punches in One Workout</div>
+        <div class="hgrain"><span class="grain-pill workout">Workout</span> Threshold: 400 <span class="oq-blocker">BLOCKED</span></div>
+      </div>
+      <div class="highlight-card">
+        <div class="hid">H11</div>
+        <div class="highlight-type punch">Punch · Combat</div>
+        <div class="hlabel">Punches This Chapter</div>
+        <div class="hgrain"><span class="grain-pill chapter">Chapter</span> Threshold: 1,000</div>
+      </div>
+      <div class="highlight-card">
+        <div class="hid">H12</div>
+        <div class="highlight-type punch">Punch · Combat</div>
+        <div class="hlabel">Fastest Punch</div>
+        <div class="hgrain"><span class="grain-pill class">Class</span> Threshold: 6.0 km/h</div>
+      </div>
+      <div class="highlight-card">
+        <div class="hid">H13</div>
+        <div class="highlight-type punch">Punch · Combat</div>
+        <div class="hlabel">Power Moves</div>
+        <div class="hgrain"><span class="grain-pill class">Class</span> Threshold: 15</div>
+      </div>
+      <div class="highlight-card">
+        <div class="hid">H14</div>
+        <div class="highlight-type punch">Punch · Combat</div>
+        <div class="hlabel">Blocks Landed</div>
+        <div class="hgrain"><span class="grain-pill class">Class</span> Threshold: 20</div>
+      </div>
+      <div class="highlight-card">
+        <div class="hid">H15</div>
+        <div class="highlight-type punch">Punch · Combat</div>
+        <div class="hlabel">Dodges Nailed</div>
+        <div class="hgrain"><span class="grain-pill class">Class</span> Threshold: 12</div>
+      </div>
+      <div class="highlight-card">
+        <div class="hid">H16</div>
+        <div class="highlight-type punch">Punch · Combat</div>
+        <div class="hlabel">Best Reaction Time</div>
+        <div class="hgrain"><span class="grain-pill class">Class</span> Threshold: 600ms (inverted)</div>
+      </div>
+    </div>
+
+    <h4 style="margin-top: 20px">Hiit / Aero / Sculpt / Dance only</h4>
+    <div class="highlight-grid">
+      <div class="highlight-card">
+        <div class="hid">H17</div>
+        <div class="highlight-type fitness">Hiit · Aero · Sculpt · Dance</div>
+        <div class="hlabel">Jumps Hit</div>
+        <div class="hgrain"><span class="grain-pill class">Class</span> Threshold: 50</div>
+      </div>
+      <div class="highlight-card">
+        <div class="hid">H18</div>
+        <div class="highlight-type fitness">Hiit · Aero · Sculpt · Dance</div>
+        <div class="hlabel">Squats Hit</div>
+        <div class="hgrain"><span class="grain-pill class">Class</span> Threshold: 40</div>
+      </div>
+      <div class="highlight-card">
+        <div class="hid">H19</div>
+        <div class="highlight-type fitness">Hiit · Aero · Sculpt · Dance</div>
+        <div class="hlabel">Footwork Steps</div>
+        <div class="hgrain"><span class="grain-pill class">Class</span> Threshold: 80</div>
+      </div>
+      <div class="highlight-card">
+        <div class="hid">H20</div>
+        <div class="highlight-type fitness">Hiit · Aero · Sculpt · Dance</div>
+        <div class="hlabel">Near Misses</div>
+        <div class="hgrain"><span class="grain-pill class">Class</span> Threshold: 15 <span class="oq-blocker">OPEN Q</span></div>
+      </div>
+    </div>
+
+    <h3 style="margin-top: 36px">Selection algorithm</h3>
+    <div class="algo-steps">
+      <div class="algo-step">
+        <div class="algo-step-num">1</div>
+        <h4>Filter</h4>
+        <p>Remove candidates where key fields are zero/empty across the chapter. Remove candidates whose granularity condition isn't met (e.g. no multi-class workouts → skip workout-level candidates, no multi-session days → skip day-level candidates).</p>
+      </div>
+      <div class="algo-step">
+        <div class="algo-step-num">2</div>
+        <h4>Score</h4>
+        <p>For each eligible candidate, compute a normalized score:</p>
+        <div class="formula">score = value / impressive_threshold<br><span class="comment"># Special case H16 (reaction time): score = threshold / value  (lower is better)</span></div>
+      </div>
+      <div class="algo-step">
+        <div class="algo-step-num">3</div>
+        <h4>Pick winner</h4>
+        <p>Highest score wins. On ties, prefer more specific granularity: <span class="tag green">Class</span> > <span class="tag coral">Workout</span> > <span class="tag blue">Day</span> > <span class="tag purple">Chapter</span>.</p>
+      </div>
+      <div class="algo-step">
+        <div class="algo-step-num">4</div>
+        <h4>Variety check</h4>
+        <p>If the same category won <em>last</em> checkpoint, skip it and use the next-highest scorer instead. Tracks which category was shown previously. <span class="oq-blocker">OPEN Q</span></p>
+      </div>
+      <div class="algo-step">
+        <div class="algo-step-num">5</div>
+        <h4>Format sub-label</h4>
+        <div class="formula">
+          Class-level   → "{displayClassType}, {formattedDate}"<br>
+          Workout-level → "Workout, {formattedDate}"<br>
+          Day-level     → "{formattedDate}"<br>
+          Chapter-level → "Across {N} classes"
+        </div>
+      </div>
+    </div>
+
+    <h3 style="margin-top: 32px">Class type display names</h3>
+    <div class="mapping-grid">
+      <div class="mapping-row"><span class="mapping-from">Punch</span><span class="mapping-arrow">→</span><span class="mapping-to">Box</span></div>
+      <div class="mapping-row"><span class="mapping-from">Combat</span><span class="mapping-arrow">→</span><span class="mapping-to">Combat</span></div>
+      <div class="mapping-row"><span class="mapping-from">Hiit</span><span class="mapping-arrow">→</span><span class="mapping-to">HIIT</span></div>
+      <div class="mapping-row"><span class="mapping-from">Aero</span><span class="mapping-arrow">→</span><span class="mapping-to">Aero</span></div>
+      <div class="mapping-row"><span class="mapping-from">Sculpt</span><span class="mapping-arrow">→</span><span class="mapping-to">Sculpt</span></div>
+      <div class="mapping-row"><span class="mapping-from">Dance</span><span class="mapping-arrow">→</span><span class="mapping-to">Dance</span></div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- S2 -->
+  <section id="s2">
+    <div class="screen-card">
+      <div class="screen-card-header">
+        <div class="screen-num wrapped">02</div>
+        <div class="title">Effort — Time, MP, Calories</div>
+        <div class="section-tag wrapped">Wrapped Moment</div>
+      </div>
+      <p>Aggregate effort for the chapter with chapter-over-chapter deltas. All three stats are chapter-level totals.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Element</th><th>Variable</th><th>Logic</th></tr></thead>
+          <tbody>
+            <tr><td>Workout time</td><td><code>totalMinutes</code></td><td><code>sum(time) / 60</code> rounded</td></tr>
+            <tr><td>Time delta</td><td><code>totalMinutes - previousTotalMinutes</code></td><td>Shown if <code>previousTotalMinutes &gt; 0</code></td></tr>
+            <tr><td>Move Points</td><td><code>movePoints</code></td><td><code>sum(points)</code> — chapter total</td></tr>
+            <tr><td>Calories</td><td><code>caloriesBurned</code></td><td><code>sum(calories)</code> — chapter total</td></tr>
+            <tr><td>Calorie delta</td><td><code>caloriesBurned - previousCaloriesBurned</code></td><td>Shown if <code>previousCaloriesBurned &gt; 0</code></td></tr>
+            <tr><td>Percentile badge</td><td><code>percentile</code></td><td>Server-side. Shown only if <code>percentile ≤ 10</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="info-box note">
+        <div class="info-box-icon">ℹ</div>
+        <p><strong>Delta format:</strong> <code>↑ {N} mins</code> / <code>↑ {N} kcal</code><br>
+        <strong>Percentile copy:</strong> <code>"Top {N}% of FitXR users this chapter"</code><br>
+        <strong>Move Points delta:</strong> Currently no delta shown — revisit if it adds value.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- S3 -->
+  <section id="s3">
+    <div class="screen-card">
+      <div class="screen-card-header">
+        <div class="screen-num wrapped">03</div>
+        <div class="title">Achievements — Milestones</div>
+        <div class="section-tag wrapped">Wrapped Moment</div>
+      </div>
+      <p>Milestone-style achievement pills for cumulative thresholds the user crossed this chapter. Max 2–3 shown.</p>
+
+      <div class="table-wrap" style="margin-bottom:20px">
+        <table>
+          <thead><tr><th>Label</th><th>Trigger</th></tr></thead>
+          <tbody>
+            <tr><td>"{N} minutes worked out"</td><td>Cumulative <code>totalMinutes</code> crosses 100, 250, 500, 1000…</td></tr>
+            <tr><td>"{N} week streak"</td><td><code>streakWeeks ≥ N</code></td></tr>
+            <tr><td>"{N} classes completed"</td><td>Lifetime <code>classesCompleted</code> crosses 10, 25, 50, 100…</td></tr>
+            <tr><td>"{N} calories burned"</td><td>Lifetime <code>caloriesBurned</code> crosses 1000, 2500, 5000…</td></tr>
+            <tr><td>"First chapter complete"</td><td><code>previousClassesCompleted === 0</code></td></tr>
+            <tr><td>"Top {N}% this chapter"</td><td><code>percentile ≤ 10</code></td></tr>
+            <tr><td>"{N} punches thrown"</td><td>Lifetime punch total crosses 500, 1000, 5000…</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="info-box note">
+        <div class="info-box-icon">ℹ</div>
+        <p><strong>Priority if >3 milestones crossed:</strong> Streak → Minutes → Classes → Others</p>
+      </div>
+      <div class="info-box warn">
+        <div class="info-box-icon">⚠</div>
+        <p><strong>Open Q:</strong> Are these a pre-existing FitXR achievement system we surface, or do we define them from scratch? Do they persist in a collection? See Open Questions #9.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- S4 -->
+  <section id="s4">
+    <div class="screen-card">
+      <div class="screen-card-header">
+        <div class="screen-num wrapped">04</div>
+        <div class="title">Streak — Calendar Grid</div>
+        <div class="section-tag wrapped">Wrapped Moment</div>
+      </div>
+      <p>Visual proof of showing up. The grid shows 14 days (2 weeks) with active/rest states.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Element</th><th>Variable</th><th>Logic</th></tr></thead>
+          <tbody>
+            <tr><td>Streak weeks</td><td><code>streakWeeks</code></td><td>Longest run of full weeks with ≥ N active days (threshold TBD)</td></tr>
+            <tr><td>Active / total days</td><td><code>activeDays / totalDays</code></td><td>Count of 1s in <code>streakDays</code> / length of array</td></tr>
+            <tr><td>Calendar grid</td><td><code>streakDays[]</code></td><td>Binary array, always 14 entries (2 weeks)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="info-box warn">
+        <div class="info-box-icon">⚠</div>
+        <p><strong>Open Q:</strong> Definition of "one week streak" — 7 consecutive days, or ≥ N sessions in any 7-day window? Show actual calendar dates or just M/T/W/T/F/S/S labels?</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- S5 -->
+  <section id="s5">
+    <div class="screen-card">
+      <div class="screen-card-header">
+        <div class="screen-num wrapped">05</div>
+        <div class="title">League — Rank + Leaderboard</div>
+        <div class="section-tag wrapped">Wrapped Moment</div>
+      </div>
+      <p>Shows where the user sits in the social leaderboard. All league data comes from the server.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Element</th><th>Variable</th><th>Logic</th></tr></thead>
+          <tbody>
+            <tr><td>League tier name</td><td><code>leagueName</code></td><td>Server-side e.g. Diamond, Gold, Silver, Bronze</td></tr>
+            <tr><td>League icon</td><td><code>leagueIcon</code></td><td>Server-side emoji</td></tr>
+            <tr><td>Rank position</td><td><code>leagueRank / leagueTotalPlayers</code></td><td>Server-side</td></tr>
+            <tr><td>Rank change</td><td><code>leagueRankChange</code></td><td>Positive = climbed, negative = dropped</td></tr>
+            <tr><td>Leaderboard preview</td><td>Top 2 + current user</td><td>Server-side: usernames + MP totals</td></tr>
+            <tr><td>Motivational copy</td><td>—</td><td>Shown if <code>leagueRankChange &gt; 0</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="info-box note">
+        <div class="info-box-icon">ℹ</div>
+        <p><strong>Motivational copy format:</strong> <code>"↑ You climbed {N} places this chapter!"</code></p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- S6 -->
+  <section id="s6">
+    <div class="screen-card">
+      <div class="screen-card-header">
+        <div class="screen-num plan">06</div>
+        <div class="title">Welcome — Plan</div>
+        <div class="section-tag plan">Plan Reset</div>
+      </div>
+      <p>Static transition screen bridging Wrapped Moment to Plan Reset.</p>
+      <div class="static-badge">✓ Mostly static</div>
+
+      <div class="condition-block" style="margin-top:16px">
+        <div class="condition-label">Conditional copy</div>
+        <ul>
+          <li><strong>Default:</strong> "Now — time to plan for the road ahead."</li>
+          <li><strong>New user:</strong> Show "⬆ Plan Upgrade" pill + same copy</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- S7 -->
+  <section id="s7">
+    <div class="screen-card">
+      <div class="screen-card-header">
+        <div class="screen-num plan">07</div>
+        <div class="title">Intensity Suggestion</div>
+        <div class="section-tag plan">Plan Reset</div>
+      </div>
+      <p>Adaptive screen that tells the user what the system recommends for the next chapter. Two variants based on performance.</p>
+
+      <div class="condition-block">
+        <div class="condition-label">Variant A — "You're KILLING it recently!"</div>
+        <ul>
+          <li><code>classesCompleted ≥ 8</code> in this chapter</li>
+          <li><code>streakWeeks ≥ 2</code></li>
+          <li>Chapter-over-chapter calorie delta <code>&gt; 0</code></li>
+        </ul>
+      </div>
+
+      <p style="font-size:13px;margin-top:4px">Variant A copy: <em>"Let's increase your intensity. You can handle a little extra spice in your next set of workouts. We're going to push the intensity a little more — you've got this!"</em></p>
+
+      <div class="condition-block" style="border-left-color: var(--muted); margin-top:16px">
+        <div class="condition-label" style="color:var(--muted)">Variant B — Standard (everyone else)</div>
+        <ul>
+          <li>Standard transition. No intensity recommendation.</li>
+        </ul>
+      </div>
+
+      <div class="info-box warn" style="margin-top:16px">
+        <div class="info-box-icon">⚠</div>
+        <p><strong>Open Q:</strong> What does "increase intensity" concretely change? Workout length tier? Difficulty flag? Class type recommendation? See Open Questions #12.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- S8 -->
+  <section id="s8">
+    <div class="screen-card">
+      <div class="screen-card-header">
+        <div class="screen-num plan">08</div>
+        <div class="title">Plan — Editable Items</div>
+        <div class="section-tag plan">Plan Reset</div>
+      </div>
+      <p>User can tap any editable item to cycle through options. Two items have dynamic defaults driven by data.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Item</th><th>Editable</th><th>Options</th></tr></thead>
+          <tbody>
+            <tr><td>Goal</td><td>No</td><td>—</td></tr>
+            <tr><td>Workout Length</td><td>Yes</td><td>15 / 20 / 25 / 30 / 40 mins</td></tr>
+            <tr><td>Upcoming Focus</td><td>Yes</td><td>Core / Full Body / Upper Body / Lower Body</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 style="margin-top:24px">Workout Length default</h3>
+      <div class="plan-decision">
+        <h4>Decision tree</h4>
+        <div class="decision-row">
+          <div class="decision-cond">New user</div>
+          <div class="decision-arrow">→</div>
+          <div class="decision-val">20 mins</div>
+        </div>
+        <div class="decision-row">
+          <div class="decision-cond">Intensity = Variant A</div>
+          <div class="decision-arrow">→</div>
+          <div class="decision-val">One tier higher than last chapter</div>
+        </div>
+        <div class="decision-row">
+          <div class="decision-cond">Returning user (default)</div>
+          <div class="decision-arrow">→</div>
+          <div class="decision-val">Carry over last checkpoint's confirmed value</div>
+        </div>
+      </div>
+
+      <h3 style="margin-top:24px">Upcoming Focus default</h3>
+      <p style="font-size:13px">Based on the body area least worked this chapter (by class type session count), then overridden by goal preference if needed.</p>
+
+      <h4 style="margin-top:16px">ClassType → Body area mapping</h4>
+      <div class="mapping-grid">
+        <div class="mapping-row"><span class="mapping-from">Punch</span><span class="mapping-arrow">→</span><span class="mapping-to">Upper Body</span></div>
+        <div class="mapping-row"><span class="mapping-from">Combat</span><span class="mapping-arrow">→</span><span class="mapping-to">Full Body</span></div>
+        <div class="mapping-row"><span class="mapping-from">Hiit</span><span class="mapping-arrow">→</span><span class="mapping-to">Lower Body</span></div>
+        <div class="mapping-row"><span class="mapping-from">Aero</span><span class="mapping-arrow">→</span><span class="mapping-to">Full Body</span></div>
+        <div class="mapping-row"><span class="mapping-from">Sculpt</span><span class="mapping-arrow">→</span><span class="mapping-to">Core</span></div>
+        <div class="mapping-row"><span class="mapping-from">Dance</span><span class="mapping-arrow">→</span><span class="mapping-to">Lower Body</span></div>
+      </div>
+
+      <h4 style="margin-top:16px">Goal override rules</h4>
+      <div class="plan-decision">
+        <div class="decision-row">
+          <div class="decision-cond">Lose Weight</div>
+          <div class="decision-arrow">→</div>
+          <div class="decision-val">Prefer Full Body or Core</div>
+        </div>
+        <div class="decision-row">
+          <div class="decision-cond">Build Strength</div>
+          <div class="decision-arrow">→</div>
+          <div class="decision-val">Prefer Upper Body or Lower Body</div>
+        </div>
+        <div class="decision-row">
+          <div class="decision-cond">Improve Mobility</div>
+          <div class="decision-arrow">→</div>
+          <div class="decision-val">Prefer Core or Lower Body</div>
+        </div>
+        <div class="decision-row">
+          <div class="decision-cond">Have Fun</div>
+          <div class="decision-arrow">→</div>
+          <div class="decision-val">Pick for variety</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S9 -->
+  <section id="s9">
+    <div class="screen-card">
+      <div class="screen-card-header">
+        <div class="screen-num plan">09</div>
+        <div class="title">Completion</div>
+        <div class="section-tag plan">Plan Reset</div>
+      </div>
+      <p>Summary of the confirmed plan. Reflects the final <code>planItems</code> state after any edits on screen 8.</p>
+      <div class="static-badge">✓ No new data — reads plan state</div>
+
+      <div class="table-wrap" style="margin-top:16px">
+        <table>
+          <thead><tr><th>Element</th><th>Variable</th><th>Logic</th></tr></thead>
+          <tbody>
+            <tr><td>Focus reminder</td><td><code>upcomingTag</code></td><td>Confirmed value from plan</td></tr>
+            <tr><td>Plan summary list</td><td><code>planItems[]</code></td><td>Final confirmed values</td></tr>
+            <tr><td>CTA</td><td>—</td><td>"Let's Go!"</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- OPEN QUESTIONS -->
+  <section id="open-questions">
+    <h2>Open Questions</h2>
+    <p class="section-intro">Unresolved questions that must be answered before the logic can be fully implemented. Blockers are flagged.</p>
+
+    <div class="oq-list">
+      <div class="oq-item">
+        <div class="oq-num">#1</div>
+        <div>
+          <h4>Workout identifier <span class="oq-blocker">BLOCKER</span></h4>
+          <p>No <code>workoutId</code> field in the current CSV. Options: (a) add <code>workoutId</code> to session data, (b) group by date + consecutive timestamp proximity, (c) treat all path classes on the same day as one workout. Blocks H3, H6, H10.</p>
+        </div>
+      </div>
+      <div class="oq-item">
+        <div class="oq-num">#2</div>
+        <div>
+          <h4>Path vs explore sessions</h4>
+          <p>Is there a field that distinguishes path/journey classes from explore (freeplay) classes? Needed to attribute sessions to workouts correctly. <code>classId</code> references a studio class but doesn't indicate source.</p>
+        </div>
+      </div>
+      <div class="oq-item">
+        <div class="oq-num">#3</div>
+        <div>
+          <h4>Chapter window definition</h4>
+          <p>What defines a chapter? Fixed 2-week window? Rolling? Event-triggered by the user hitting a goal?</p>
+        </div>
+      </div>
+      <div class="oq-item">
+        <div class="oq-num">#4</div>
+        <div>
+          <h4><code>dateCreation</code> timezone</h4>
+          <p>Unix timestamp — which timezone to display dates in? User's local, or UTC?</p>
+        </div>
+      </div>
+      <div class="oq-item">
+        <div class="oq-num">#5</div>
+        <div>
+          <h4><code>percentile</code> source</h4>
+          <p>Pre-computed server-side, or derived from <code>leagueRank / leagueTotalPlayers</code>?</p>
+        </div>
+      </div>
+      <div class="oq-item">
+        <div class="oq-num">#6</div>
+        <div>
+          <h4><code>medal</code> field scale</h4>
+          <p>Values seen in data: <code>1</code> and <code>4</code>. Is it 1=none, 2=bronze, 3=silver, 4=gold? Direction should be confirmed.</p>
+        </div>
+      </div>
+      <div class="oq-item">
+        <div class="oq-num">#7</div>
+        <div>
+          <h4><code>handTrackingPercent = 0</code></h4>
+          <p>Does 0 mean perfect tracking (zero drops) or 0% tracked? Direction is unclear.</p>
+        </div>
+      </div>
+      <div class="oq-item">
+        <div class="oq-num">#8</div>
+        <div>
+          <h4>Combo field semantics</h4>
+          <p>Are <code>bestExplosiveStreak</code>, <code>bestLegacyStreak</code>, <code>bestLightningStreak</code> different names for the same combo mechanic in different class modes, or genuinely different move types? Affects whether we always take the max.</p>
+        </div>
+      </div>
+      <div class="oq-item">
+        <div class="oq-num">#9</div>
+        <div>
+          <h4>Almosts — positive or negative signal?</h4>
+          <p>Does a high <code>almostsPerformed</code> count mean the user pushed hard (positive) or struggled (neutral/negative)? Affects whether H20 is a valid highlight candidate.</p>
+        </div>
+      </div>
+      <div class="oq-item">
+        <div class="oq-num">#10</div>
+        <div>
+          <h4>Streak definition</h4>
+          <p>What counts as "one week streak"? 7 consecutive days? Or ≥ N sessions in any 7-day window?</p>
+        </div>
+      </div>
+      <div class="oq-item">
+        <div class="oq-num">#11</div>
+        <div>
+          <h4>Achievements as game system</h4>
+          <p>Are the milestone badges a pre-existing FitXR achievement system we surface, or are we defining them from scratch? Does the user collect them persistently?</p>
+        </div>
+      </div>
+      <div class="oq-item">
+        <div class="oq-num">#12</div>
+        <div>
+          <h4>Highlight rotation persistence</h4>
+          <p>How do we track which highlight category was shown last checkpoint to enforce variety? Stored server-side on the user profile?</p>
+        </div>
+      </div>
+      <div class="oq-item">
+        <div class="oq-num">#13</div>
+        <div>
+          <h4>Highlight thresholds calibration</h4>
+          <p>All thresholds in this doc are rough estimates. Need real distribution data to calibrate what's genuinely impressive vs ordinary.</p>
+        </div>
+      </div>
+      <div class="oq-item">
+        <div class="oq-num">#14</div>
+        <div>
+          <h4>Intensity → plan mapping</h4>
+          <p>What does "increase intensity" in Variant A concretely change? Workout length only, or a difficulty parameter in the class recommendation?</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div style="height:80px"></div>
+
+</main>
+
+<script>
+  // Active nav link on scroll
+  const sections = document.querySelectorAll('section[id], div[id]');
+  const navLinks = document.querySelectorAll('.nav-link');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        navLinks.forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href') === '#' + id) {
+            link.classList.add('active');
+          }
+        });
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+
+  sections.forEach(section => observer.observe(section));
+</script>
+
+</body>
+</html>
