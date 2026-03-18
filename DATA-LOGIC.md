@@ -23,6 +23,29 @@ The checkpoint has two sections: **Wrapped Moment** (screens 0–5) and **Plan R
 
 ---
 
+## Data Hierarchy
+
+There are four levels at which we can aggregate data:
+
+```
+Chapter  ─── the full window of sessions since the last checkpoint
+  └── Day  ─── all sessions on a given calendar date (path + explore)
+        └── Workout  ─── 1–3 classes from the user's structured path for that day
+              └── Class  ─── a single session (one row in the CSV)
+```
+
+**Class** — a single session. One row in the session CSV.
+
+**Workout** — the structured set of 1–3 classes the user's daily path prescribed for that day. A user follows these from their "journey". Accessed via path, not freeplay.
+
+**Day** — all sessions played on a given calendar date, regardless of source. This includes both path/journey workouts and any explore (freeplay) classes on top.
+
+**Chapter** — the full window of sessions since the last checkpoint. Contains all days.
+
+**Grouping sessions into workouts:** workout grouping needs a workout identifier field — `classId` and `dateCreation` alone are not sufficient to reliably group classes into the same structured workout. This is an **open Q** (see below).
+
+---
+
 ## Data Sources
 
 All per-session fields come from the raw session CSV. The chapter is the window of sessions since the last checkpoint. Cross-chapter comparisons use the equivalent window from the previous chapter.
@@ -66,14 +89,37 @@ All per-session fields come from the raw session CSV. The chapter is the window 
 | `handTrackingPercent` | number | hand tracking quality |
 | `classesCompleted` | number | always 1 per session row |
 
-### Chapter-level derived values
+### Derived aggregates
+
+**Class level** — raw from CSV, no derivation needed.
+
+**Workout level** — group sessions by workout ID (TBD field). Sum or max fields across the 1–3 classes in that workout.
+
+| Derived | Formula |
+|---|---|
+| `workout.calories` | `sum(calories)` across classes in workout |
+| `workout.minutes` | `sum(time) / 60` across classes in workout |
+| `workout.movePoints` | `sum(points)` across classes in workout |
+| `workout.totalPunches` | sum of all punch fields across classes in workout |
+
+**Day level** — group sessions by calendar date from `dateCreation`. Sum across all classes that day.
+
+| Derived | Formula |
+|---|---|
+| `day.calories` | `sum(calories)` across all sessions on that date |
+| `day.minutes` | `sum(time) / 60` across all sessions on that date |
+| `day.movePoints` | `sum(points)` across all sessions on that date |
+| `day.sessionCount` | count of sessions on that date |
+
+**Chapter level** — aggregate across the full chapter window.
 
 | Variable | Derivation |
 |---|---|
 | `classesCompleted` | count of session rows in chapter window |
-| `totalMinutes` | `sum(time) / 60` across sessions |
-| `caloriesBurned` | `sum(calories)` across sessions |
-| `movePoints` | `sum(points)` across sessions |
+| `workoutsCompleted` | count of distinct workouts in chapter window |
+| `totalMinutes` | `sum(time) / 60` across all sessions |
+| `caloriesBurned` | `sum(calories)` across all sessions |
+| `movePoints` | `sum(points)` across all sessions |
 | `sessionsByClassType` | group sessions by `classType`, sort by count desc — used for plan Focus default |
 | `streakDays` | binary array: 1 for each day in chapter window with ≥1 session |
 | `streakWeeks` | longest unbroken run of 7-day windows with ≥ N active days (TBD threshold) |
@@ -125,67 +171,79 @@ The highlight is the single most impressive, tangible number from the chapter. I
 - Specific to a session (anchored with class type + date)
 - Varies across checkpoints so it doesn't go stale
 
-**Highlight categories:**
+**Highlight candidates:**
 
 ##### Available for all class types
 
-| # | Label | Value | Source |
-|---|---|---|---|
-| H1 | Highest Combo | e.g. `1,523` | `max(bestExplosiveStreak, bestLegacyStreak, bestLightningStreak, bestDanceStreak)` — take the session where this is highest, then pick the max field from that session |
-| H2 | Move Points in One Class | e.g. `5,338 MP` | `max(points)` across sessions |
-| H3 | Move Points in One Day | e.g. `8,210 MP` | `sum(points)` grouped by calendar date, take peak day — only eligible if user played ≥2 sessions on same day |
-| H4 | Calories in One Class | e.g. `127 kcal` | `max(calories)` across sessions |
-| H5 | Longest Session | e.g. `28 min` | `max(time) / 60` rounded down |
+| # | Label | Granularity | Value | Source | Sub-label |
+|---|---|---|---|---|---|
+| H1 | Highest Combo | Class | e.g. `1,523` | `max(bestExplosiveStreak, bestLegacyStreak, bestLightningStreak, bestDanceStreak)` across all sessions | `"{classType}, {date}"` |
+| H2 | Move Points in One Class | Class | e.g. `5,338 MP` | `max(points)` across sessions | `"{classType}, {date}"` |
+| H3 | Move Points in One Workout | Workout | e.g. `9,100 MP` | `max(workout.movePoints)` across workouts — only eligible if workouts have ≥2 classes | `"Workout, {date}"` |
+| H4 | Move Points in One Day | Day | e.g. `11,200 MP` | `max(day.movePoints)` — only eligible if user played on ≥1 day with multiple sessions | `"{date}"` |
+| H5 | Calories in One Class | Class | e.g. `127 kcal` | `max(calories)` across sessions | `"{classType}, {date}"` |
+| H6 | Calories in One Workout | Workout | e.g. `210 kcal` | `max(workout.calories)` across workouts — only eligible if workouts have ≥2 classes | `"Workout, {date}"` |
+| H7 | Calories in One Day | Day | e.g. `290 kcal` | `max(day.calories)` — only eligible if user played on ≥1 day with multiple sessions | `"{date}"` |
+| H8 | Longest Session | Class | e.g. `28 min` | `max(time) / 60` rounded down | `"{classType}, {date}"` |
 
 ##### Punch / Combat class types only
 
-| # | Label | Value | Source |
-|---|---|---|---|
-| H6 | Punches Thrown | e.g. `312 punches` | `jabsHitLeft + jabsHitRight + hooksHitLeft + hooksHitRight + uppercutsHitLeft + uppercutsHitRight + doublePunchesHit + hammerStrikesHitLeft + hammerStrikesHitRight + elbowStrikesHitLeft + elbowStrikesHitRight` — take the single session with the highest total |
-| H7 | Punches Thrown (Chapter) | e.g. `2,841 punches` | same formula, `sum` across all punch/combat sessions — sub-label: `"Across {N} classes"` |
-| H8 | Fastest Punch | e.g. `7.4 km/h` | `max(maxPunchSpeed)` across punch/combat sessions |
-| H9 | Power Moves | e.g. `19 power moves` | `max(powerMoves)` in a single punch/combat session |
-| H10 | Blocks Landed | e.g. `34 blocks` | `max(blocksHit + risingBlocksHitLeft + risingBlocksHitRight)` in a single session |
-| H11 | Dodges Nailed | e.g. `18 dodges` | `max(slipsHitLeft + slipsHitRight + longAvoidsHitLeft + longAvoidsHitMiddle + longAvoidsHitRight)` in a single session |
-| H12 | Best Reaction Time | e.g. `558 ms` | `min(averageReactionTime)` across sessions (lower = better) — only eligible if field is populated |
+| # | Label | Granularity | Value | Source | Sub-label |
+|---|---|---|---|---|---|
+| H9 | Punches in One Class | Class | e.g. `312 punches` | `jabsHitLeft + jabsHitRight + hooksHitLeft + hooksHitRight + uppercutsHitLeft + uppercutsHitRight + doublePunchesHit + hammerStrikesHitLeft + hammerStrikesHitRight + elbowStrikesHitLeft + elbowStrikesHitRight` — single session with highest total | `"{classType}, {date}"` |
+| H10 | Punches in One Workout | Workout | e.g. `580 punches` | same formula, summed across classes in best workout | `"Workout, {date}"` |
+| H11 | Punches This Chapter | Chapter | e.g. `2,841 punches` | same formula, `sum` across all punch/combat sessions | `"Across {N} classes"` |
+| H12 | Fastest Punch | Class | e.g. `7.4 km/h` | `max(maxPunchSpeed)` across punch/combat sessions | `"{classType}, {date}"` |
+| H13 | Power Moves | Class | e.g. `19 power moves` | `max(powerMoves)` in a single session | `"{classType}, {date}"` |
+| H14 | Blocks Landed | Class | e.g. `34 blocks` | `max(blocksHit + risingBlocksHitLeft + risingBlocksHitRight)` in a single session | `"{classType}, {date}"` |
+| H15 | Dodges Nailed | Class | e.g. `18 dodges` | `max(slipsHitLeft + slipsHitRight + longAvoidsHitLeft + longAvoidsHitMiddle + longAvoidsHitRight)` in a single session | `"{classType}, {date}"` |
+| H16 | Best Reaction Time | Class | e.g. `558 ms` | `min(averageReactionTime)` across sessions (lower = better) | `"{classType}, {date}"` |
 
 ##### Hiit / Aero / Sculpt / Dance class types only
 
-| # | Label | Value | Source |
-|---|---|---|---|
-| H13 | Jumps Hit | e.g. `95 jumps` | `max(jumpsHit)` in a single session |
-| H14 | Squats Hit | e.g. `86 squats` | `max(squatsHit)` in a single session |
-| H15 | Footwork Steps | e.g. `156 steps` | `max(stepsHitLeft + stepsHitRight)` in a single session |
-| H16 | Near Misses | e.g. `33 almosts` | `max(almostsPerformed)` in a single session — framing: shows how hard they pushed |
+| # | Label | Granularity | Value | Source | Sub-label |
+|---|---|---|---|---|---|
+| H17 | Jumps Hit | Class | e.g. `95 jumps` | `max(jumpsHit)` in a single session | `"{classType}, {date}"` |
+| H18 | Squats Hit | Class | e.g. `86 squats` | `max(squatsHit)` in a single session | `"{classType}, {date}"` |
+| H19 | Footwork Steps | Class | e.g. `156 steps` | `max(stepsHitLeft + stepsHitRight)` in a single session | `"{classType}, {date}"` |
+| H20 | Near Misses | Class | e.g. `33 almosts` | `max(almostsPerformed)` in a single session — signals how hard they pushed | `"{classType}, {date}"` |
 
 **Selection algorithm:**
 
-1. **Filter** — exclude any category where the key fields are empty/zero across all sessions in the chapter
+1. **Filter** — exclude any candidate where the key fields are empty/zero across the chapter, or where the granularity condition isn't met (e.g. no multi-class days → skip day-level candidates)
 2. **Score** — for each eligible candidate: `score = value / impressive_threshold` (thresholds below)
-3. **Pick** — candidate with the highest score wins
-4. **Variety** — if the same category won last chapter, drop it and use the next highest score
-5. **Sub-label** — for session-based stats: `"{displayClassType}, {formattedDate}"` / for chapter-totals: `"Across {N} classes"`
+3. **Pick** — candidate with highest score wins. Ties: prefer class-level over workout/day/chapter (more specific = more memorable)
+4. **Variety** — if the same category won last checkpoint, skip it and use the next highest score
+5. **Sub-label format:**
+   - Class-level: `"{displayClassType}, {formattedDate}"`
+   - Workout-level: `"Workout, {formattedDate}"`
+   - Day-level: `"{formattedDate}"`
+   - Chapter-level: `"Across {N} classes"`
 
-**Impressive thresholds (to calibrate with real data):**
+**Impressive thresholds (placeholder — calibrate with real distribution data):**
 
-| Category | Threshold |
-|---|---|
-| Highest Combo | 400 |
-| Move Points in One Class | 3,500 MP |
-| Move Points in One Day | 6,000 MP |
-| Calories in One Class | 70 kcal |
-| Longest Session | 25 min |
-| Punches in One Session | 150 |
-| Punches in Chapter | 1,000 |
-| Fastest Punch | 6.0 km/h |
-| Power Moves | 15 |
-| Blocks Landed | 20 |
-| Dodges Nailed | 12 |
-| Best Reaction Time | 600 ms (lower = higher score, invert: `threshold / value`) |
-| Jumps Hit | 50 |
-| Squats Hit | 40 |
-| Footwork Steps | 80 |
-| Near Misses | 15 |
+| # | Category | Threshold |
+|---|---|---|
+| H1 | Highest Combo | 400 |
+| H2 | Move Points — Class | 3,500 MP |
+| H3 | Move Points — Workout | 7,000 MP |
+| H4 | Move Points — Day | 10,000 MP |
+| H5 | Calories — Class | 70 kcal |
+| H6 | Calories — Workout | 150 kcal |
+| H7 | Calories — Day | 220 kcal |
+| H8 | Longest Session | 25 min |
+| H9 | Punches — Class | 150 |
+| H10 | Punches — Workout | 400 |
+| H11 | Punches — Chapter | 1,000 |
+| H12 | Fastest Punch | 6.0 km/h |
+| H13 | Power Moves | 15 |
+| H14 | Blocks Landed | 20 |
+| H15 | Dodges Nailed | 12 |
+| H16 | Best Reaction Time | 600 ms (invert: `threshold / value`) |
+| H17 | Jumps Hit | 50 |
+| H18 | Squats Hit | 40 |
+| H19 | Footwork Steps | 80 |
+| H20 | Near Misses | 15 |
 
 **Class type display names:**
 
@@ -199,7 +257,7 @@ The highlight is the single most impressive, tangible number from the chapter. I
 | `Dance` | Dance |
 
 **New user (first chapter) override:**
-- Skip scoring, show: label `"First Class Complete"`, sub-label `"{displayClassType}, {date of first session}"`, no numeric value
+- Skip scoring entirely. Show: label `"First Class Complete"`, sub-label `"{displayClassType}, {date of first session}"`, no numeric value
 
 ---
 
@@ -209,12 +267,14 @@ The aggregate effort for the chapter, with chapter-over-chapter deltas.
 
 | Element | Variable | Logic |
 |---|---|---|
-| Workout time | `totalMinutes` | `sum(time) / 60` rounded |
+| Workout time | `totalMinutes` | `sum(time) / 60` rounded — chapter total |
 | Time delta | `totalMinutes - previousTotalMinutes` | shown if `previousTotalMinutes > 0` |
-| Move Points | `movePoints` | `sum(points)` |
-| Calories | `caloriesBurned` | `sum(calories)` |
+| Move Points | `movePoints` | `sum(points)` — chapter total |
+| Calories | `caloriesBurned` | `sum(calories)` — chapter total |
 | Calorie delta | `caloriesBurned - previousCaloriesBurned` | shown if `previousCaloriesBurned > 0` |
 | Percentile badge | `percentile` | server-side, shown only if `percentile <= 10` |
+
+All three stats are chapter-level totals (classes + workouts + days all rolled up). The Highlight screen (screen 1) is where we surface the more granular class/workout/day breakdowns.
 
 **Delta format:** `↑ {N} mins` / `↑ {N} kcal`
 **Percentile copy:** `"Top {N}% of FitXR users this chapter"`
@@ -377,8 +437,10 @@ Summary of confirmed plan. No new data — reflects final `planItems` state afte
 
 ## Open Questions
 
-1. **Chapter window** — What defines a chapter? Fixed 2-week window? Rolling? Event-triggered by the user hitting a goal?
-2. **`dateCreation` timezone** — Unix timestamp. Which timezone to display dates in — user's local, or UTC?
+1. **Workout identifier** — There's no workout ID field in the current CSV. How do we group 1–3 classes into the same structured workout? Options: (a) a `workoutId` field gets added to the session data, (b) we group by date + consecutive timestamp proximity, (c) we treat all path classes on the same day as one workout. This is a blocker for any workout-level highlight.
+2. **Path vs explore sessions** — Is there a field that distinguishes path/journey classes from explore (freeplay) classes? Needed to correctly attribute sessions to workouts. `classId` references a studio class but doesn't indicate source.
+3. **Chapter window** — What defines a chapter? Fixed 2-week window? Rolling? Event-triggered by the user hitting a goal?
+4. **`dateCreation` timezone** — Unix timestamp. Which timezone to display dates in — user's local, or UTC?
 3. **`percentile`** — pre-computed server-side or derived from `leagueRank / leagueTotalPlayers`?
 4. **`medal` field scale** — values seen in data: `1` and `4`. Is it 1=none, 2=bronze, 3=silver, 4=gold?
 5. **`handTrackingPercent = 0`** — does 0 mean perfect tracking (zero drops) or 0% tracked? Direction is unclear.
