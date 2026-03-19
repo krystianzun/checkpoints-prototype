@@ -583,7 +583,9 @@
         border-radius: 10px;
         padding: 9px 14px;
         cursor: pointer;
-        transition: background 0.15s, border-color 0.15s;
+        transition:
+          background 0.15s,
+          border-color 0.15s;
         font-family: var(--font);
         color: var(--muted);
         font-size: 13px;
@@ -622,7 +624,7 @@
         border-radius: 50%;
         background: #fff;
         transition: transform 0.2s;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
       }
       .theme-toggle-track.on .theme-toggle-thumb {
         transform: translateX(14px);
@@ -1247,7 +1249,11 @@
       <a href="#s8" class="nav-link"><span class="nav-dot"></span>8 · Plan</a>
 
       <div class="theme-toggle">
-        <button class="theme-toggle-btn" id="themeToggle" onclick="toggleTheme()">
+        <button
+          class="theme-toggle-btn"
+          id="themeToggle"
+          onclick="toggleTheme()"
+        >
           <span class="theme-toggle-icon" id="themeIcon">☀️</span>
           <span class="theme-toggle-label" id="themeLabel">Light mode</span>
           <div class="theme-toggle-track" id="themeTrack">
@@ -2474,19 +2480,6 @@
             Trigger: chapter aggregate exceeds previous chapter max
           </div>
         </div>
-
-        <div class="info-box note">
-          <div class="info-box-icon">ℹ</div>
-          <p>
-            <strong>Recommended approach:</strong> Treat
-            <span class="tag blue">B1</span> (community rank) and
-            <span class="tag blue">B2</span> (peak session rank) as separate
-            badges — B1 uses a fixed calendar window for fair comparison, B2
-            anchors to a single session to sidestep the chapter timing problem
-            entirely. Show max one community badge and one personal badge per
-            checkpoint to avoid overload.
-          </p>
-        </div>
       </section>
 
       <div class="divider"></div>
@@ -2850,21 +2843,27 @@
     <script>
       // Theme toggle
       function applyTheme(isLight) {
-        document.documentElement.classList.toggle('light', isLight);
-        document.getElementById('themeIcon').textContent = isLight ? '🌙' : '☀️';
-        document.getElementById('themeLabel').textContent = isLight ? 'Dark mode' : 'Light mode';
-        document.getElementById('themeTrack').classList.toggle('on', isLight);
+        document.documentElement.classList.toggle("light", isLight);
+        document.getElementById("themeIcon").textContent = isLight
+          ? "🌙"
+          : "☀️";
+        document.getElementById("themeLabel").textContent = isLight
+          ? "Dark mode"
+          : "Light mode";
+        document.getElementById("themeTrack").classList.toggle("on", isLight);
       }
       function toggleTheme() {
-        const isLight = !document.documentElement.classList.contains('light');
+        const isLight = !document.documentElement.classList.contains("light");
         applyTheme(isLight);
-        localStorage.setItem('theme', isLight ? 'light' : 'dark');
+        localStorage.setItem("theme", isLight ? "light" : "dark");
       }
       // Restore saved preference on load
       (function () {
-        const saved = localStorage.getItem('theme');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        const isLight = saved === 'light' || (!saved && !prefersDark);
+        const saved = localStorage.getItem("theme");
+        const prefersDark = window.matchMedia(
+          "(prefers-color-scheme: dark)",
+        ).matches;
+        const isLight = saved === "light" || (!saved && !prefersDark);
         applyTheme(isLight);
       })();
 
