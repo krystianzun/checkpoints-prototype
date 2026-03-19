@@ -1064,14 +1064,6 @@
         ><span class="nav-dot"></span>7 · Intensity</a
       >
       <a href="#s8" class="nav-link"><span class="nav-dot"></span>8 · Plan</a>
-      <a href="#s9" class="nav-link"
-        ><span class="nav-dot"></span>9 · Completion</a
-      >
-
-      <div class="nav-section" style="margin-top: 8px">Reference</div>
-      <a href="#open-questions" class="nav-link"
-        ><span class="nav-dot"></span>Open Questions</a
-      >
     </aside>
 
     <!-- MAIN CONTENT -->
@@ -2222,7 +2214,7 @@
                 </tr>
                 <tr>
                   <td>Intensity stays the same</td>
-                  <td>No choice shown — screen flows through with a single continue action</td>
+                  <td>Simple CTA to acknowledge the recommendation</td>
                 </tr>
               </tbody>
             </table>
@@ -2244,335 +2236,47 @@
             <div class="section-tag plan">Plan Reset</div>
           </div>
           <p>
-            User can tap any editable item to cycle through options. Two items
-            have dynamic defaults driven by data.
+            Shows the user's plan for the next chapter with three tappable rows. Each row can be tapped to adjust the value before committing.
           </p>
-
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Item</th>
-                  <th>Editable</th>
-                  <th>Options</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Goal</td>
-                  <td>No</td>
-                  <td>—</td>
-                </tr>
-                <tr>
-                  <td>Workout Length</td>
-                  <td>Yes</td>
-                  <td>15 / 20 / 25 / 30 / 40 mins</td>
-                </tr>
-                <tr>
-                  <td>Upcoming Focus</td>
-                  <td>Yes</td>
-                  <td>Core / Full Body / Upper Body / Lower Body</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <h3 style="margin-top: 24px">Workout Length default</h3>
-          <div class="plan-decision">
-            <h4>Decision tree</h4>
-            <div class="decision-row">
-              <div class="decision-cond">New user</div>
-              <div class="decision-arrow">→</div>
-              <div class="decision-val">20 mins</div>
-            </div>
-            <div class="decision-row">
-              <div class="decision-cond">Intensity = Variant A</div>
-              <div class="decision-arrow">→</div>
-              <div class="decision-val">One tier higher than last chapter</div>
-            </div>
-            <div class="decision-row">
-              <div class="decision-cond">Returning user (default)</div>
-              <div class="decision-arrow">→</div>
-              <div class="decision-val">
-                Carry over last checkpoint's confirmed value
-              </div>
-            </div>
-          </div>
-
-          <h3 style="margin-top: 24px">Upcoming Focus default</h3>
-          <p style="font-size: 13px">
-            Based on the body area least worked this chapter (by class type
-            session count), then overridden by goal preference if needed.
-          </p>
-
-          <h4 style="margin-top: 16px">ClassType → Body area mapping</h4>
-          <div class="mapping-grid">
-            <div class="mapping-row">
-              <span class="mapping-from">Punch</span
-              ><span class="mapping-arrow">→</span
-              ><span class="mapping-to">Upper Body</span>
-            </div>
-            <div class="mapping-row">
-              <span class="mapping-from">Combat</span
-              ><span class="mapping-arrow">→</span
-              ><span class="mapping-to">Full Body</span>
-            </div>
-            <div class="mapping-row">
-              <span class="mapping-from">Hiit</span
-              ><span class="mapping-arrow">→</span
-              ><span class="mapping-to">Lower Body</span>
-            </div>
-            <div class="mapping-row">
-              <span class="mapping-from">Aero</span
-              ><span class="mapping-arrow">→</span
-              ><span class="mapping-to">Full Body</span>
-            </div>
-            <div class="mapping-row">
-              <span class="mapping-from">Sculpt</span
-              ><span class="mapping-arrow">→</span
-              ><span class="mapping-to">Core</span>
-            </div>
-            <div class="mapping-row">
-              <span class="mapping-from">Dance</span
-              ><span class="mapping-arrow">→</span
-              ><span class="mapping-to">Lower Body</span>
-            </div>
-          </div>
-
-          <h4 style="margin-top: 16px">Goal override rules</h4>
-          <div class="plan-decision">
-            <div class="decision-row">
-              <div class="decision-cond">Lose Weight</div>
-              <div class="decision-arrow">→</div>
-              <div class="decision-val">Prefer Full Body or Core</div>
-            </div>
-            <div class="decision-row">
-              <div class="decision-cond">Build Strength</div>
-              <div class="decision-arrow">→</div>
-              <div class="decision-val">Prefer Upper Body or Lower Body</div>
-            </div>
-            <div class="decision-row">
-              <div class="decision-cond">Improve Mobility</div>
-              <div class="decision-arrow">→</div>
-              <div class="decision-val">Prefer Core or Lower Body</div>
-            </div>
-            <div class="decision-row">
-              <div class="decision-cond">Have Fun</div>
-              <div class="decision-arrow">→</div>
-              <div class="decision-val">Pick for variety</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- S9 -->
-      <section id="s9">
-        <div class="screen-card">
-          <div class="screen-card-header">
-            <div class="screen-num plan">09</div>
-            <div class="title">Completion</div>
-            <div class="section-tag plan">Plan Reset</div>
-          </div>
-          <p>
-            Summary of the confirmed plan. Reflects the final
-            <code>planItems</code> state after any edits on screen 8.
-          </p>
-          <div class="static-badge">✓ No new data — reads plan state</div>
 
           <div class="table-wrap" style="margin-top: 16px">
             <table>
               <thead>
-                <tr>
-                  <th>Element</th>
-                  <th>Variable</th>
-                  <th>Logic</th>
-                </tr>
+                <tr><th>Element</th><th>Value</th></tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>Focus reminder</td>
-                  <td><code>upcomingTag</code></td>
-                  <td>Confirmed value from plan</td>
-                </tr>
-                <tr>
-                  <td>Plan summary list</td>
-                  <td><code>planItems[]</code></td>
-                  <td>Final confirmed values</td>
-                </tr>
-                <tr>
-                  <td>CTA</td>
-                  <td>—</td>
-                  <td>"Let's Go!"</td>
-                </tr>
+                <tr><td>Header pill</td><td>"Plan"</td></tr>
+                <tr><td>Headline</td><td>"Your Plan"</td></tr>
+                <tr><td>Sub-copy</td><td>"Tap any item to adjust before you start"</td></tr>
+                <tr><td>CTA</td><td>"Let's go!"</td></tr>
               </tbody>
             </table>
           </div>
-        </div>
-      </section>
 
-      <div class="divider"></div>
-
-      <!-- OPEN QUESTIONS -->
-      <section id="open-questions">
-        <h2>Open Questions</h2>
-        <p class="section-intro">
-          Unresolved questions that must be answered before the logic can be
-          fully implemented. Blockers are flagged.
-        </p>
-
-        <div class="oq-list">
-          <div class="oq-item">
-            <div class="oq-num">#1</div>
-            <div>
-              <h4>Workout identifier</h4>
-              <p>
-                No <code>workoutId</code> field in the current CSV. Options: (a)
-                add <code>workoutId</code> to session data, (b) group by date +
-                consecutive timestamp proximity, (c) treat all path classes on
-                the same day as one workout. Blocks H3, H6, H10.
-              </p>
-            </div>
-          </div>
-          <div class="oq-item">
-            <div class="oq-num">#2</div>
-            <div>
-              <h4>Path vs explore sessions</h4>
-              <p>
-                Is there a field that distinguishes path/journey classes from
-                explore (freeplay) classes? Needed to attribute sessions to
-                workouts correctly. <code>classId</code> references a studio
-                class but doesn't indicate source.
-              </p>
-            </div>
-          </div>
-          <div class="oq-item">
-            <div class="oq-num">#3</div>
-            <div>
-              <h4>Chapter window definition</h4>
-              <p>
-                What defines a chapter? Fixed 2-week window? Rolling?
-                Event-triggered by the user hitting a goal?
-              </p>
-            </div>
-          </div>
-          <div class="oq-item">
-            <div class="oq-num">#4</div>
-            <div>
-              <h4><code>dateCreation</code> timezone</h4>
-              <p>
-                Unix timestamp — which timezone to display dates in? User's
-                local, or UTC?
-              </p>
-            </div>
-          </div>
-          <div class="oq-item">
-            <div class="oq-num">#5</div>
-            <div>
-              <h4><code>percentile</code> source</h4>
-              <p>
-                Pre-computed server-side, or derived from
-                <code>leagueRank / leagueTotalPlayers</code>?
-              </p>
-            </div>
-          </div>
-          <div class="oq-item">
-            <div class="oq-num">#6</div>
-            <div>
-              <h4><code>medal</code> field scale</h4>
-              <p>
-                Values seen in data: <code>1</code> and <code>4</code>. Is it
-                1=none, 2=bronze, 3=silver, 4=gold? Direction should be
-                confirmed.
-              </p>
-            </div>
-          </div>
-          <div class="oq-item">
-            <div class="oq-num">#7</div>
-            <div>
-              <h4><code>handTrackingPercent = 0</code></h4>
-              <p>
-                Does 0 mean perfect tracking (zero drops) or 0% tracked?
-                Direction is unclear.
-              </p>
-            </div>
-          </div>
-          <div class="oq-item">
-            <div class="oq-num">#8</div>
-            <div>
-              <h4>Combo field semantics</h4>
-              <p>
-                Are <code>bestExplosiveStreak</code>,
-                <code>bestLegacyStreak</code>,
-                <code>bestLightningStreak</code> different names for the same
-                combo mechanic in different class modes, or genuinely different
-                move types? Affects whether we always take the max.
-              </p>
-            </div>
-          </div>
-          <div class="oq-item">
-            <div class="oq-num">#9</div>
-            <div>
-              <h4>Almosts — positive or negative signal?</h4>
-              <p>
-                Does a high <code>almostsPerformed</code> count mean the user
-                pushed hard (positive) or struggled (neutral/negative)? Affects
-                whether H20 is a valid highlight candidate.
-              </p>
-            </div>
-          </div>
-          <div class="oq-item">
-            <div class="oq-num">#10</div>
-            <div>
-              <h4>Streak definition</h4>
-              <p>
-                What counts as "one week streak"? 7 consecutive days? Or ≥ N
-                sessions in any 7-day window?
-              </p>
-            </div>
-          </div>
-          <div class="oq-item">
-            <div class="oq-num">#11</div>
-            <div>
-              <h4>Achievements as game system</h4>
-              <p>
-                Are the milestone badges a pre-existing FitXR achievement system
-                we surface, or are we defining them from scratch? Does the user
-                collect them persistently?
-              </p>
-            </div>
-          </div>
-          <div class="oq-item">
-            <div class="oq-num">#12</div>
-            <div>
-              <h4>Highlight rotation persistence</h4>
-              <p>
-                How do we track which highlight category was shown last
-                checkpoint to enforce variety? Stored server-side on the user
-                profile?
-              </p>
-            </div>
-          </div>
-          <div class="oq-item">
-            <div class="oq-num">#13</div>
-            <div>
-              <h4>Highlight thresholds calibration</h4>
-              <p>
-                All thresholds in this doc are rough estimates. Need real
-                distribution data to calibrate what's genuinely impressive vs
-                ordinary.
-              </p>
-            </div>
-          </div>
-          <div class="oq-item">
-            <div class="oq-num">#14</div>
-            <div>
-              <h4>Intensity → plan mapping</h4>
-              <p>
-                What does "increase intensity" in Variant A concretely change?
-                Workout length only, or a difficulty parameter in the class
-                recommendation?
-              </p>
-            </div>
+          <h3 style="margin-top: 24px; margin-bottom: 12px;">Plan rows</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Row</th><th>Default value</th><th>Editable</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Goal</td>
+                  <td>User's current goal e.g. "Lose Weight"</td>
+                  <td>Yes — tappable to change goal</td>
+                </tr>
+                <tr>
+                  <td>Workout Length</td>
+                  <td>Range e.g. "10–20 mins" — carried over from previous chapter, or adjusted by intensity recommendation</td>
+                  <td>Yes</td>
+                </tr>
+                <tr>
+                  <td>Intensity</td>
+                  <td>Reflects the recommendation engine output e.g. "Increasing", "Maintaining", "Decreasing"</td>
+                  <td>Yes — user can override if they opted out on screen 07</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </section>
