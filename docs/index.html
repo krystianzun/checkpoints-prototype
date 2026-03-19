@@ -34,6 +34,28 @@
         --mono: "JetBrains Mono", monospace;
         --sidebar-w: 260px;
       }
+
+      /* ── LIGHT MODE ── */
+      :root.light {
+        --bg: #f2f4f8;
+        --bg2: #ffffff;
+        --bg3: #edf0f5;
+        --border: rgba(0, 0, 0, 0.08);
+        --border-bright: rgba(0, 0, 0, 0.15);
+        --text: #111827;
+        --muted: #6b7280;
+        --blue: #2563eb;
+        --blue-glow: rgba(37, 99, 235, 0.1);
+        --coral: #e0430f;
+        --coral-glow: rgba(224, 67, 15, 0.1);
+        --green: #16a34a;
+        --green-glow: rgba(22, 163, 74, 0.1);
+        --amber: #b45309;
+        --amber-glow: rgba(180, 83, 9, 0.1);
+        --purple: #7c3aed;
+        --purple-glow: rgba(124, 58, 237, 0.1);
+        --cyan: #0891b2;
+      }
       *,
       *::before,
       *::after {
@@ -543,6 +565,94 @@
       .tag.purple {
         background: var(--purple-glow);
         color: var(--purple);
+      }
+
+      /* ── THEME TOGGLE ── */
+      .theme-toggle {
+        margin-top: auto;
+        padding: 20px 24px 4px;
+        border-top: 1px solid var(--border);
+      }
+      .theme-toggle-btn {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+        background: var(--bg3);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 9px 14px;
+        cursor: pointer;
+        transition: background 0.15s, border-color 0.15s;
+        font-family: var(--font);
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 500;
+      }
+      .theme-toggle-btn:hover {
+        border-color: var(--border-bright);
+        color: var(--text);
+      }
+      .theme-toggle-icon {
+        font-size: 15px;
+        line-height: 1;
+        flex-shrink: 0;
+      }
+      .theme-toggle-label {
+        flex: 1;
+      }
+      .theme-toggle-track {
+        width: 32px;
+        height: 18px;
+        border-radius: 9px;
+        background: var(--border-bright);
+        position: relative;
+        transition: background 0.2s;
+        flex-shrink: 0;
+      }
+      .theme-toggle-track.on {
+        background: var(--blue);
+      }
+      .theme-toggle-thumb {
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #fff;
+        transition: transform 0.2s;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+      }
+      .theme-toggle-track.on .theme-toggle-thumb {
+        transform: translateX(14px);
+      }
+
+      /* Light mode overrides for hardcoded rgba values */
+      :root.light code {
+        background: rgba(0, 0, 0, 0.05);
+        color: var(--cyan);
+      }
+      :root.light .nav-link:hover {
+        background: rgba(0, 0, 0, 0.04);
+      }
+      :root.light .h-item:hover {
+        background: rgba(0, 0, 0, 0.04);
+      }
+      :root.light tbody tr:hover {
+        background: rgba(0, 0, 0, 0.02);
+      }
+      :root.light .highlight-type.all {
+        background: rgba(0, 0, 0, 0.05);
+      }
+      :root.light .screen-ref img {
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+      }
+      :root.light .screen-ref img:hover {
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      }
+      :root.light .toggle-heading:hover {
+        background: rgba(0, 0, 0, 0.03);
       }
 
       /* ── SCREEN REFERENCE IMAGE ── */
@@ -1135,6 +1245,16 @@
         ><span class="nav-dot"></span>7 · Intensity</a
       >
       <a href="#s8" class="nav-link"><span class="nav-dot"></span>8 · Plan</a>
+
+      <div class="theme-toggle">
+        <button class="theme-toggle-btn" id="themeToggle" onclick="toggleTheme()">
+          <span class="theme-toggle-icon" id="themeIcon">☀️</span>
+          <span class="theme-toggle-label" id="themeLabel">Light mode</span>
+          <div class="theme-toggle-track" id="themeTrack">
+            <div class="theme-toggle-thumb"></div>
+          </div>
+        </button>
+      </div>
     </aside>
 
     <!-- MAIN CONTENT -->
@@ -2728,6 +2848,26 @@
     </main>
 
     <script>
+      // Theme toggle
+      function applyTheme(isLight) {
+        document.documentElement.classList.toggle('light', isLight);
+        document.getElementById('themeIcon').textContent = isLight ? '🌙' : '☀️';
+        document.getElementById('themeLabel').textContent = isLight ? 'Dark mode' : 'Light mode';
+        document.getElementById('themeTrack').classList.toggle('on', isLight);
+      }
+      function toggleTheme() {
+        const isLight = !document.documentElement.classList.contains('light');
+        applyTheme(isLight);
+        localStorage.setItem('theme', isLight ? 'light' : 'dark');
+      }
+      // Restore saved preference on load
+      (function () {
+        const saved = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const isLight = saved === 'light' || (!saved && !prefersDark);
+        applyTheme(isLight);
+      })();
+
       // Lightbox
       const lb = document.createElement("div");
       lb.className = "lightbox";
