@@ -1050,6 +1050,9 @@
         ><span class="nav-dot"></span>&nbsp;&nbsp;↳ Highlight Logic</a
       >
       <a href="#s2" class="nav-link"><span class="nav-dot"></span>2 · Effort</a>
+      <a href="#badge-logic" class="nav-link"
+        ><span class="nav-dot"></span>&nbsp;&nbsp;↳ Badge Logic</a
+      >
       <a href="#s3" class="nav-link"
         ><span class="nav-dot"></span>3 · Achievements</a
       >
@@ -2049,6 +2052,123 @@
           </div>
         </div>
       </section>
+
+      <!-- BADGE LOGIC -->
+      <section id="badge-logic">
+        <h2>Badge Logic</h2>
+        <p class="section-intro">Mini-achievements surfaced across the Wrapped Moment. Each badge must feel earned and specific — not generic. The percentile badge in particular needs a <strong>universal, fixed reference window</strong> so comparisons are meaningful across users whose chapters are all personalised and time-shifted.</p>
+
+        <div class="info-box note">
+          <div class="info-box-icon">ℹ</div>
+          <p><strong>Why "this chapter" doesn't work for community comparisons.</strong> Chapters are user-relative — two users hitting their checkpoint on the same day may have had completely different windows. A fixed calendar window (e.g. "this month") gives everyone the same baseline.</p>
+        </div>
+
+        <h3 style="margin-top: 32px; margin-bottom: 16px;">Badge types</h3>
+
+        <!-- Community rank -->
+        <div class="highlight-card" style="margin-bottom: 10px; border-radius: 12px; padding: 18px 20px;">
+          <div class="hid">B1</div>
+          <div class="highlight-type all" style="margin-bottom: 6px;">Community rank</div>
+          <div class="hlabel" style="margin-bottom: 6px;">Top {N}% — calendar window</div>
+          <p style="font-size: 12px; margin-bottom: 6px;">Percentile ranking against all FitXR users on a fixed, universal time window. Avoids the personalised-chapter comparison problem.</p>
+          <div class="formula" style="margin: 0;">
+            Label: "Top {N}% in {Month}"<br>
+            Window: calendar month (same for all users)<br>
+            Metric: Move Points, calories, or classes — pick highest percentile
+          </div>
+        </div>
+
+        <!-- Peak session -->
+        <div class="highlight-card" style="margin-bottom: 10px; border-radius: 12px; padding: 18px 20px;">
+          <div class="hid">B2</div>
+          <div class="highlight-type all" style="margin-bottom: 6px;">Peak session rank</div>
+          <div class="hlabel" style="margin-bottom: 6px;">Your best session ranked in the top {N}%</div>
+          <p style="font-size: 12px; margin-bottom: 6px;">Compares a single peak session against all users globally — sidesteps the chapter window problem entirely and feels more personal.</p>
+          <div class="formula" style="margin: 0;">
+            Label: "Your best session: top {N}% for Move Points globally"<br>
+            Metric: max(points) in a single session this chapter
+          </div>
+        </div>
+
+        <!-- Personal best -->
+        <div class="highlight-card" style="margin-bottom: 10px; border-radius: 12px; padding: 18px 20px;">
+          <div class="hid">B3</div>
+          <div class="highlight-type all" style="margin-bottom: 6px;">Personal best</div>
+          <div class="hlabel" style="margin-bottom: 6px;">New PB on any tracked metric</div>
+          <p style="font-size: 12px; margin-bottom: 6px;">User beat their own all-time record on a specific metric this chapter. Purely self-comparative — no community baseline needed.</p>
+          <div class="formula" style="margin: 0;">
+            Examples: "New PB — fastest punch ever", "Best combo this chapter"<br>
+            Trigger: value &gt; lifetime max on that metric
+          </div>
+        </div>
+
+        <!-- Chapter over chapter -->
+        <div class="highlight-card" style="margin-bottom: 10px; border-radius: 12px; padding: 18px 20px;">
+          <div class="hid">B4</div>
+          <div class="highlight-type all" style="margin-bottom: 6px;">Chapter-over-chapter growth</div>
+          <div class="hlabel" style="margin-bottom: 6px;">More active / stronger than last chapter</div>
+          <p style="font-size: 12px; margin-bottom: 6px;">Celebrates meaningful improvement vs the previous chapter. Works within the personalised window since both chapters belong to the same user.</p>
+          <div class="formula" style="margin: 0;">
+            Examples: "20% more active than last chapter", "Doubled your Move Points"<br>
+            Trigger: delta &gt; threshold vs previousChapter
+          </div>
+        </div>
+
+        <!-- Streak -->
+        <div class="highlight-card" style="margin-bottom: 10px; border-radius: 12px; padding: 18px 20px;">
+          <div class="hid">B5</div>
+          <div class="highlight-type all" style="margin-bottom: 6px;">Streak</div>
+          <div class="hlabel" style="margin-bottom: 6px;">{N}-day or {N}-week streak</div>
+          <p style="font-size: 12px; margin-bottom: 6px;">Consistency milestone. Already surfaced on the Streak screen — surfacing as a badge here too gives it cross-screen weight.</p>
+          <div class="formula" style="margin: 0;">
+            Examples: "7-day streak", "First 30-day streak"<br>
+            Trigger: streakDays crosses a milestone threshold
+          </div>
+        </div>
+
+        <!-- Volume milestone -->
+        <div class="highlight-card" style="margin-bottom: 10px; border-radius: 12px; padding: 18px 20px;">
+          <div class="hid">B6</div>
+          <div class="highlight-type all" style="margin-bottom: 6px;">Lifetime volume milestone</div>
+          <div class="hlabel" style="margin-bottom: 6px;">Cumulative threshold crossed</div>
+          <p style="font-size: 12px; margin-bottom: 6px;">Celebrates crossing a round lifetime number. Works independently of any time window.</p>
+          <div class="formula" style="margin: 0;">
+            Examples: "500 classes completed", "10,000 punches landed", "1,000 mins worked out"<br>
+            Trigger: lifetime cumulative crosses defined threshold
+          </div>
+        </div>
+
+        <!-- Consistency -->
+        <div class="highlight-card" style="margin-bottom: 10px; border-radius: 12px; padding: 18px 20px;">
+          <div class="hid">B7</div>
+          <div class="highlight-type all" style="margin-bottom: 6px;">Consistency pattern</div>
+          <div class="hlabel" style="margin-bottom: 6px;">Showed up every day this week / hit goal every week</div>
+          <p style="font-size: 12px; margin-bottom: 6px;">Pattern-based rather than raw volume — rewards regularity over intensity.</p>
+          <div class="formula" style="margin: 0;">
+            Examples: "Worked out every day this week", "Hit your goal 4 weeks running"<br>
+            Trigger: pattern condition met within chapter window
+          </div>
+        </div>
+
+        <!-- Effort spike -->
+        <div class="highlight-card" style="margin-bottom: 24px; border-radius: 12px; padding: 18px 20px;">
+          <div class="hid">B8</div>
+          <div class="highlight-type all" style="margin-bottom: 6px;">Effort spike</div>
+          <div class="hlabel" style="margin-bottom: 6px;">Busiest chapter yet / most calories in a single day</div>
+          <p style="font-size: 12px; margin-bottom: 6px;">Chapter-relative personal best — compares this chapter's peak against all previous chapters.</p>
+          <div class="formula" style="margin: 0;">
+            Examples: "Busiest chapter yet", "Most calories burned in a single day — ever"<br>
+            Trigger: chapter aggregate exceeds previous chapter max
+          </div>
+        </div>
+
+        <div class="info-box note">
+          <div class="info-box-icon">ℹ</div>
+          <p><strong>Recommended approach:</strong> Treat <span class="tag blue">B1</span> (community rank) and <span class="tag blue">B2</span> (peak session rank) as separate badges — B1 uses a fixed calendar window for fair comparison, B2 anchors to a single session to sidestep the chapter timing problem entirely. Show max one community badge and one personal badge per checkpoint to avoid overload.</p>
+        </div>
+      </section>
+
+      <div class="divider"></div>
 
       <!-- S3 -->
       <section id="s3">
