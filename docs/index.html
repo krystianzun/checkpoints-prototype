@@ -1577,7 +1577,6 @@
             Full-screen background photo. All content is static — no computed
             data needed on this screen.
           </p>
-          <div class="static-badge">✓ No data required</div>
           <div class="table-wrap" style="margin-top: 16px">
             <table>
               <thead>
@@ -2086,52 +2085,38 @@
             <div class="section-tag wrapped">Wrapped Moment</div>
           </div>
           <p>
-            Visual proof of showing up. The grid shows 14 days (2 weeks) with
-            active/rest states.
+            Celebrates the user's current daily streak — the number of
+            consecutive days they have worked out up to and including the
+            checkpoint date. Shown as a large number with motivational copy
+            referencing their goal commitment (e.g.
+            <em>"Amazing progress along your commitment of 30 days!"</em>).
           </p>
 
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Element</th>
-                  <th>Variable</th>
-                  <th>Logic</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Streak weeks</td>
-                  <td><code>streakWeeks</code></td>
-                  <td>
-                    Longest run of full weeks with ≥ N active days (threshold
-                    TBD)
-                  </td>
-                </tr>
-                <tr>
-                  <td>Active / total days</td>
-                  <td><code>activeDays / totalDays</code></td>
-                  <td>
-                    Count of 1s in <code>streakDays</code> / length of array
-                  </td>
-                </tr>
-                <tr>
-                  <td>Calendar grid</td>
-                  <td><code>streakDays[]</code></td>
-                  <td>Binary array, always 14 entries (2 weeks)</td>
-                </tr>
-              </tbody>
-            </table>
+          <div class="condition-block" style="margin-top: 16px">
+            <div class="condition-label">When this screen shows</div>
+            <ul>
+              <li>
+                User's current streak is <strong>≥ 2 days</strong> at the time
+                of the checkpoint
+              </li>
+            </ul>
           </div>
 
-          <div class="info-box warn">
-            <div class="info-box-icon">⚠</div>
-            <p>
-              <strong>Open Q:</strong> Definition of "one week streak" — 7
-              consecutive days, or ≥ N sessions in any 7-day window? Show actual
-              calendar dates or just M/T/W/T/F/S/S labels?
-            </p>
+          <div
+            class="condition-block"
+            style="border-left-color: var(--muted); margin-top: 10px"
+          >
+            <div class="condition-label" style="color: var(--muted)">
+              When this screen is skipped
+            </div>
+            <ul>
+              <li>
+                User's streak is <strong>0 or 1</strong> — they broke their
+                streak recently or have only just started
+              </li>
+            </ul>
           </div>
+
           <div class="conditional-label">Conditional</div>
         </div>
       </section>
@@ -2164,21 +2149,45 @@
             <div class="title">Welcome — Plan</div>
             <div class="section-tag plan">Plan Reset</div>
           </div>
-          <p>Static transition screen bridging Wrapped Moment to Plan Reset.</p>
-          <div class="static-badge">✓ Mostly static</div>
+          <p>
+            Static transition screen bridging the Wrapped Moment into Plan
+            Reset.
+          </p>
 
-          <div class="condition-block" style="margin-top: 16px">
-            <div class="condition-label">Conditional copy</div>
-            <ul>
-              <li>
-                <strong>Default:</strong> "Now — time to plan for the road
-                ahead."
-              </li>
-              <li>
-                <strong>New user:</strong> Show "⬆ Plan Upgrade" pill + same
-                copy
-              </li>
-            </ul>
+          <div class="table-wrap" style="margin-top: 16px">
+            <table>
+              <thead>
+                <tr>
+                  <th>Element</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Header pill</td>
+                  <td>"Plan"</td>
+                </tr>
+                <tr>
+                  <td>Headline</td>
+                  <td>"Now — <em>time to plan</em> for the road ahead."</td>
+                </tr>
+                <tr>
+                  <td>Sub-copy</td>
+                  <td>
+                    "Take a moment to review what's coming next and adjust
+                    anything if you'd like."
+                  </td>
+                </tr>
+                <tr>
+                  <td>CTA</td>
+                  <td>"Plan"</td>
+                </tr>
+                <tr>
+                  <td>Secondary action</td>
+                  <td>"SKIP"</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </section>
@@ -2192,49 +2201,36 @@
             <div class="section-tag plan">Plan Reset</div>
           </div>
           <p>
-            Adaptive screen that tells the user what the system recommends for
-            the next chapter. Two variants based on performance.
+            Presents the recommendation engine's output to the user in a motivating, human way. The recommendation itself is fully determined upstream — this screen just surfaces the result through pre-written copy variants and asks the user to confirm or opt out.
           </p>
 
-          <div class="condition-block">
-            <div class="condition-label">
-              Variant A — "You're KILLING it recently!"
-            </div>
-            <ul>
-              <li><code>classesCompleted ≥ 8</code> in this chapter</li>
-              <li><code>streakWeeks ≥ 2</code></li>
-              <li>Chapter-over-chapter calorie delta <code>&gt; 0</code></li>
-            </ul>
-          </div>
+          <h3 style="margin-top: 24px; margin-bottom: 12px;">Copy variants</h3>
+          <p style="font-size: 13px;">Three pre-written variants cover all possible recommendation engine outcomes — intensity increased, stays the same, or decreased. Full copy TBD.</p>
 
-          <p style="font-size: 13px; margin-top: 4px">
-            Variant A copy:
-            <em
-              >"Let's increase your intensity. You can handle a little extra
-              spice in your next set of workouts. We're going to push the
-              intensity a little more — you've got this!"</em
-            >
+          <h3 style="margin-top: 28px; margin-bottom: 12px;">User agency — CTAs</h3>
+          <p style="font-size: 13px;">
+            CTAs are only shown when the recommendation involves a change. If the plan stays the same, no confirmation is needed and the screen flows through automatically.
           </p>
 
-          <div
-            class="condition-block"
-            style="border-left-color: var(--muted); margin-top: 16px"
-          >
-            <div class="condition-label" style="color: var(--muted)">
-              Variant B — Standard (everyone else)
-            </div>
-            <ul>
-              <li>Standard transition. No intensity recommendation.</li>
-            </ul>
+          <div class="table-wrap" style="margin-top: 12px;">
+            <table>
+              <thead><tr><th>Recommendation</th><th>CTAs shown</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td>Intensity increased or decreased</td>
+                  <td>"Let's lock in!" to accept · "Keep it as it is" to opt out</td>
+                </tr>
+                <tr>
+                  <td>Intensity stays the same</td>
+                  <td>No choice shown — screen flows through with a single continue action</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
 
-          <div class="info-box warn" style="margin-top: 16px">
-            <div class="info-box-icon">⚠</div>
-            <p>
-              <strong>Open Q:</strong> What does "increase intensity" concretely
-              change? Workout length tier? Difficulty flag? Class type
-              recommendation? See Open Questions #12.
-            </p>
+          <div class="info-box note" style="margin-top: 4px;">
+            <div class="info-box-icon">ℹ</div>
+            <p>Giving the user an explicit opt-in for changes — rather than applying them automatically — reinforces their sense of control and makes them feel like an active participant in their plan.</p>
           </div>
         </div>
       </section>
