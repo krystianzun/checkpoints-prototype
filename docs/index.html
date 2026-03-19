@@ -338,16 +338,21 @@
         color: var(--muted);
         margin-top: 3px;
       }
-      .flow-card.conditional {
+      .flow-card.conditional,
+      .screen-card.conditional {
         border-style: dashed;
         border-width: 1px;
-        border-color: rgba(61,139,255,0.35);
+        border-color: rgba(61, 139, 255, 0.35);
         border-top-style: dashed;
         border-top-width: 2px;
-        border-top-color: rgba(61,139,255,0.5);
+        border-top-color: rgba(61, 139, 255, 0.5);
         opacity: 0.8;
       }
-      .flow-card.conditional:hover { opacity: 1; border-color: rgba(61,139,255,0.6); }
+      .flow-card.conditional:hover,
+      .screen-card.conditional:hover {
+        opacity: 1;
+        border-color: rgba(61, 139, 255, 0.6);
+      }
       .conditional-label {
         display: inline-flex;
         align-items: center;
@@ -359,7 +364,7 @@
         letter-spacing: 0.05em;
       }
       .conditional-label::before {
-        content: '';
+        content: "";
         display: inline-block;
         width: 12px;
         height: 1px;
@@ -967,19 +972,28 @@
         border-radius: 10px;
         transition: background 0.15s;
       }
-      .toggle-heading:hover { background: rgba(255,255,255,0.03); }
+      .toggle-heading:hover {
+        background: rgba(255, 255, 255, 0.03);
+      }
       .toggle-icon {
         display: flex;
         align-items: center;
         color: var(--muted);
         flex-shrink: 0;
-        transition: transform 0.25s ease, color 0.15s;
+        transition:
+          transform 0.25s ease,
+          color 0.15s;
       }
-      .toggle-heading.open .toggle-icon { transform: rotate(180deg); color: var(--blue); }
+      .toggle-heading.open .toggle-icon {
+        transform: rotate(180deg);
+        color: var(--blue);
+      }
       .toggle-body {
         overflow: hidden;
         max-height: 0;
-        transition: max-height 0.35s ease, opacity 0.25s ease;
+        transition:
+          max-height 0.35s ease,
+          opacity 0.25s ease;
         opacity: 0;
       }
       .toggle-body.open {
@@ -1207,266 +1221,276 @@
         <h2 class="toggle-heading" data-target="data-sources-body">
           Data Sources
           <span class="toggle-icon">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path
+                d="M4 6l4 4 4-4"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
           </span>
         </h2>
         <div id="data-sources-body" class="toggle-body">
-        <p class="section-intro">
-          All per-session fields come from the raw session CSV. Cross-chapter
-          comparisons use the equivalent window from the previous chapter.
-        </p>
+          <p class="section-intro">
+            All per-session fields come from the raw session CSV. Cross-chapter
+            comparisons use the equivalent window from the previous chapter.
+          </p>
 
-        <h3>Session-level fields (from CSV)</h3>
+          <h3>Session-level fields (from CSV)</h3>
 
-        <h4 style="margin-top: 20px">Identity & core metrics</h4>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Field</th>
-                <th>Type</th>
-                <th>Notes</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>profileId</td>
-                <td><span class="tag blue">string</span></td>
-                <td>User identifier</td>
-              </tr>
-              <tr>
-                <td>dateCreation</td>
-                <td><span class="tag blue">Unix timestamp</span></td>
-                <td>
-                  Session date — use for <code>"Jan 23rd"</code> formatting.
-                  Timezone TBD.
-                </td>
-              </tr>
-              <tr>
-                <td>classId</td>
-                <td><span class="tag blue">string</span></td>
-                <td>Specific class played</td>
-              </tr>
-              <tr>
-                <td>classType</td>
-                <td><span class="tag blue">string</span></td>
-                <td>
-                  <code>Punch</code> · <code>Combat</code> · <code>Hiit</code> ·
-                  <code>Aero</code> · <code>Sculpt</code> · <code>Dance</code>
-                </td>
-              </tr>
-              <tr>
-                <td>time</td>
-                <td><span class="tag green">number (s)</span></td>
-                <td>Session duration in seconds</td>
-              </tr>
-              <tr>
-                <td>calories</td>
-                <td><span class="tag green">number</span></td>
-                <td>kcal burned in session</td>
-              </tr>
-              <tr>
-                <td>points</td>
-                <td><span class="tag green">number</span></td>
-                <td>Move Points earned in session</td>
-              </tr>
-              <tr>
-                <td>medal</td>
-                <td><span class="tag amber">number</span></td>
-                <td>1=none · 2=bronze · 3=silver · 4=gold</td>
-              </tr>
-              <tr>
-                <td>classesCompleted</td>
-                <td><span class="tag green">number</span></td>
-                <td>Always 1 per session row</td>
-              </tr>
-              <tr>
-                <td>handTrackingPercent</td>
-                <td><span class="tag green">number</span></td>
-                <td>Hand tracking quality — direction unclear</td>
-              </tr>
-            </tbody>
-          </table>
+          <h4 style="margin-top: 20px">Identity & core metrics</h4>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Field</th>
+                  <th>Type</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>profileId</td>
+                  <td><span class="tag blue">string</span></td>
+                  <td>User identifier</td>
+                </tr>
+                <tr>
+                  <td>dateCreation</td>
+                  <td><span class="tag blue">Unix timestamp</span></td>
+                  <td>
+                    Session date — use for <code>"Jan 23rd"</code> formatting.
+                    Timezone TBD.
+                  </td>
+                </tr>
+                <tr>
+                  <td>classId</td>
+                  <td><span class="tag blue">string</span></td>
+                  <td>Specific class played</td>
+                </tr>
+                <tr>
+                  <td>classType</td>
+                  <td><span class="tag blue">string</span></td>
+                  <td>
+                    <code>Punch</code> · <code>Combat</code> ·
+                    <code>Hiit</code> · <code>Aero</code> ·
+                    <code>Sculpt</code> · <code>Dance</code>
+                  </td>
+                </tr>
+                <tr>
+                  <td>time</td>
+                  <td><span class="tag green">number (s)</span></td>
+                  <td>Session duration in seconds</td>
+                </tr>
+                <tr>
+                  <td>calories</td>
+                  <td><span class="tag green">number</span></td>
+                  <td>kcal burned in session</td>
+                </tr>
+                <tr>
+                  <td>points</td>
+                  <td><span class="tag green">number</span></td>
+                  <td>Move Points earned in session</td>
+                </tr>
+                <tr>
+                  <td>medal</td>
+                  <td><span class="tag amber">number</span></td>
+                  <td>1=none · 2=bronze · 3=silver · 4=gold</td>
+                </tr>
+                <tr>
+                  <td>classesCompleted</td>
+                  <td><span class="tag green">number</span></td>
+                  <td>Always 1 per session row</td>
+                </tr>
+                <tr>
+                  <td>handTrackingPercent</td>
+                  <td><span class="tag green">number</span></td>
+                  <td>Hand tracking quality — direction unclear</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h4 style="margin-top: 24px">Combo streaks</h4>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Field</th>
+                  <th>Type</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>bestExplosiveStreak</td>
+                  <td><span class="tag green">number</span></td>
+                  <td rowspan="4">
+                    Best combo in session. Semantics may differ by class mode.
+                  </td>
+                </tr>
+                <tr>
+                  <td>bestLegacyStreak</td>
+                  <td><span class="tag green">number</span></td>
+                </tr>
+                <tr>
+                  <td>bestLightningStreak</td>
+                  <td><span class="tag green">number</span></td>
+                </tr>
+                <tr>
+                  <td>bestDanceStreak</td>
+                  <td><span class="tag green">number</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h4 style="margin-top: 24px">Speed metrics</h4>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Field</th>
+                  <th>Type</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>maxPunchSpeed</td>
+                  <td><span class="tag green">number (km/h)</span></td>
+                  <td>Fastest single punch in session</td>
+                </tr>
+                <tr>
+                  <td>averagePunchSpeed</td>
+                  <td><span class="tag green">number (km/h)</span></td>
+                  <td>Average punch speed in session</td>
+                </tr>
+                <tr>
+                  <td>averageReactionTime</td>
+                  <td><span class="tag green">number (ms)</span></td>
+                  <td>Average reaction time — lower is better</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h4 style="margin-top: 24px">Strike types (Box / Combat only)</h4>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Field</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>jabsHitLeft / jabsHitRight</td>
+                  <td>Jabs landed per hand</td>
+                </tr>
+                <tr>
+                  <td>hooksHitLeft / hooksHitRight</td>
+                  <td>Hooks landed per hand</td>
+                </tr>
+                <tr>
+                  <td>uppercutsHitLeft / uppercutsHitRight</td>
+                  <td>Uppercuts per hand</td>
+                </tr>
+                <tr>
+                  <td>doublePunchesHit</td>
+                  <td>Double punches landed</td>
+                </tr>
+                <tr>
+                  <td>hammerStrikesHitLeft / hammerStrikesHitRight</td>
+                  <td>Hammer strikes per hand</td>
+                </tr>
+                <tr>
+                  <td>elbowStrikesHitLeft / elbowStrikesHitRight</td>
+                  <td>Elbow strikes per hand</td>
+                </tr>
+                <tr>
+                  <td>powerMoves</td>
+                  <td>Power moves landed</td>
+                </tr>
+                <tr>
+                  <td>blocksHit</td>
+                  <td>Blocks landed</td>
+                </tr>
+                <tr>
+                  <td>risingBlocksHitLeft / risingBlocksHitRight</td>
+                  <td>Rising blocks per hand</td>
+                </tr>
+                <tr>
+                  <td>slipsHitLeft / slipsHitRight</td>
+                  <td>Slips/dodges per side</td>
+                </tr>
+                <tr>
+                  <td>
+                    longAvoidsHitLeft / longAvoidsHitMiddle / longAvoidsHitRight
+                  </td>
+                  <td>Long dodge moves</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h4 style="margin-top: 24px">
+            Body movement (Hiit / Aero / Sculpt / Dance only)
+          </h4>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Field</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>jumpsHit</td>
+                  <td>Jumps landed</td>
+                </tr>
+                <tr>
+                  <td>squatsHit</td>
+                  <td>Squats hit</td>
+                </tr>
+                <tr>
+                  <td>stepsHitLeft / stepsHitRight</td>
+                  <td>Footwork steps per side</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h4 style="margin-top: 24px">Accuracy ratings</h4>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Field</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>almostsPerformed</td>
+                  <td>Near-miss attempts — signal of push effort</td>
+                </tr>
+                <tr>
+                  <td>goodsPerformed</td>
+                  <td>"Good" accuracy ratings</td>
+                </tr>
+                <tr>
+                  <td>totalBestMoves</td>
+                  <td>Total best-rated moves in session</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-
-        <h4 style="margin-top: 24px">Combo streaks</h4>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Field</th>
-                <th>Type</th>
-                <th>Notes</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>bestExplosiveStreak</td>
-                <td><span class="tag green">number</span></td>
-                <td rowspan="4">
-                  Best combo in session. Semantics may differ by class mode.
-                </td>
-              </tr>
-              <tr>
-                <td>bestLegacyStreak</td>
-                <td><span class="tag green">number</span></td>
-              </tr>
-              <tr>
-                <td>bestLightningStreak</td>
-                <td><span class="tag green">number</span></td>
-              </tr>
-              <tr>
-                <td>bestDanceStreak</td>
-                <td><span class="tag green">number</span></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <h4 style="margin-top: 24px">Speed metrics</h4>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Field</th>
-                <th>Type</th>
-                <th>Notes</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>maxPunchSpeed</td>
-                <td><span class="tag green">number (km/h)</span></td>
-                <td>Fastest single punch in session</td>
-              </tr>
-              <tr>
-                <td>averagePunchSpeed</td>
-                <td><span class="tag green">number (km/h)</span></td>
-                <td>Average punch speed in session</td>
-              </tr>
-              <tr>
-                <td>averageReactionTime</td>
-                <td><span class="tag green">number (ms)</span></td>
-                <td>Average reaction time — lower is better</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <h4 style="margin-top: 24px">Strike types (Box / Combat only)</h4>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Field</th>
-                <th>Notes</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>jabsHitLeft / jabsHitRight</td>
-                <td>Jabs landed per hand</td>
-              </tr>
-              <tr>
-                <td>hooksHitLeft / hooksHitRight</td>
-                <td>Hooks landed per hand</td>
-              </tr>
-              <tr>
-                <td>uppercutsHitLeft / uppercutsHitRight</td>
-                <td>Uppercuts per hand</td>
-              </tr>
-              <tr>
-                <td>doublePunchesHit</td>
-                <td>Double punches landed</td>
-              </tr>
-              <tr>
-                <td>hammerStrikesHitLeft / hammerStrikesHitRight</td>
-                <td>Hammer strikes per hand</td>
-              </tr>
-              <tr>
-                <td>elbowStrikesHitLeft / elbowStrikesHitRight</td>
-                <td>Elbow strikes per hand</td>
-              </tr>
-              <tr>
-                <td>powerMoves</td>
-                <td>Power moves landed</td>
-              </tr>
-              <tr>
-                <td>blocksHit</td>
-                <td>Blocks landed</td>
-              </tr>
-              <tr>
-                <td>risingBlocksHitLeft / risingBlocksHitRight</td>
-                <td>Rising blocks per hand</td>
-              </tr>
-              <tr>
-                <td>slipsHitLeft / slipsHitRight</td>
-                <td>Slips/dodges per side</td>
-              </tr>
-              <tr>
-                <td>
-                  longAvoidsHitLeft / longAvoidsHitMiddle / longAvoidsHitRight
-                </td>
-                <td>Long dodge moves</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <h4 style="margin-top: 24px">
-          Body movement (Hiit / Aero / Sculpt / Dance only)
-        </h4>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Field</th>
-                <th>Notes</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>jumpsHit</td>
-                <td>Jumps landed</td>
-              </tr>
-              <tr>
-                <td>squatsHit</td>
-                <td>Squats hit</td>
-              </tr>
-              <tr>
-                <td>stepsHitLeft / stepsHitRight</td>
-                <td>Footwork steps per side</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <h4 style="margin-top: 24px">Accuracy ratings</h4>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Field</th>
-                <th>Notes</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>almostsPerformed</td>
-                <td>Near-miss attempts — signal of push effort</td>
-              </tr>
-              <tr>
-                <td>goodsPerformed</td>
-                <td>"Good" accuracy ratings</td>
-              </tr>
-              <tr>
-                <td>totalBestMoves</td>
-                <td>Total best-rated moves in session</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        </div><!-- /toggle-body data-sources -->
+        <!-- /toggle-body data-sources -->
       </section>
 
       <div class="divider"></div>
@@ -1476,55 +1500,65 @@
         <h2 class="toggle-heading" data-target="derived-aggregates-body">
           Derived Aggregates
           <span class="toggle-icon">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path
+                d="M4 6l4 4 4-4"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
           </span>
         </h2>
         <div id="derived-aggregates-body" class="toggle-body">
-        <p class="section-intro">
-          Higher-level metrics are computed by rolling up raw session fields.
-          Class-level is always raw — no derivation needed.
-        </p>
+          <p class="section-intro">
+            Higher-level metrics are computed by rolling up raw session fields.
+            Class-level is always raw — no derivation needed.
+          </p>
 
-        <h3>Workout level</h3>
-        <p>
-          Group sessions by workout ID (TBD). Sum or max across the 1–3 classes
-          in that workout.
-        </p>
-        <div class="formula">
-          workout.calories = sum(calories) across classes in workout<br />
-          workout.minutes = sum(time) / 60 across classes in workout<br />
-          workout.movePoints = sum(points) across classes in workout<br />
-          workout.totalPunches = sum(all punch fields) across classes in workout
-        </div>
+          <h3>Workout level</h3>
+          <p>
+            Group sessions by workout ID (TBD). Sum or max across the 1–3
+            classes in that workout.
+          </p>
+          <div class="formula">
+            workout.calories = sum(calories) across classes in workout<br />
+            workout.minutes = sum(time) / 60 across classes in workout<br />
+            workout.movePoints = sum(points) across classes in workout<br />
+            workout.totalPunches = sum(all punch fields) across classes in
+            workout
+          </div>
 
-        <h3>Day level</h3>
-        <p>
-          Group sessions by calendar date from <code>dateCreation</code>. Sum
-          across all classes that day.
-        </p>
-        <div class="formula">
-          day.calories = sum(calories) — all sessions on that date<br />
-          day.minutes = sum(time) / 60 — all sessions on that date<br />
-          day.movePoints = sum(points) — all sessions on that date<br />
-          day.sessionCount = count of sessions on that date
-        </div>
+          <h3>Day level</h3>
+          <p>
+            Group sessions by calendar date from <code>dateCreation</code>. Sum
+            across all classes that day.
+          </p>
+          <div class="formula">
+            day.calories = sum(calories) — all sessions on that date<br />
+            day.minutes = sum(time) / 60 — all sessions on that date<br />
+            day.movePoints = sum(points) — all sessions on that date<br />
+            day.sessionCount = count of sessions on that date
+          </div>
 
-        <h3>Chapter level</h3>
-        <p>
-          Aggregate across the full chapter window (all sessions since last
-          checkpoint).
-        </p>
-        <div class="formula">
-          classesCompleted = count of session rows in chapter<br />
-          workoutsCompleted = count of distinct workouts in chapter<br />
-          totalMinutes = sum(time) / 60<br />
-          caloriesBurned = sum(calories)<br />
-          movePoints = sum(points)<br />
-          sessionsByClassType = group by classType, sort by count desc<br />
-          streakDays = binary array: 1 for each day with ≥1 session<br />
-          streakWeeks = longest run of 7-day windows with ≥ N active days
+          <h3>Chapter level</h3>
+          <p>
+            Aggregate across the full chapter window (all sessions since last
+            checkpoint).
+          </p>
+          <div class="formula">
+            classesCompleted = count of session rows in chapter<br />
+            workoutsCompleted = count of distinct workouts in chapter<br />
+            totalMinutes = sum(time) / 60<br />
+            caloriesBurned = sum(calories)<br />
+            movePoints = sum(points)<br />
+            sessionsByClassType = group by classType, sort by count desc<br />
+            streakDays = binary array: 1 for each day with ≥1 session<br />
+            streakWeeks = longest run of 7-day windows with ≥ N active days
+          </div>
         </div>
-        </div><!-- /toggle-body derived-aggregates -->
+        <!-- /toggle-body derived-aggregates -->
       </section>
 
       <div class="divider"></div>
@@ -2027,88 +2061,22 @@
 
       <!-- S3 -->
       <section id="s3">
-        <div class="screen-card">
+        <div class="screen-card conditional">
           <div class="screen-card-header">
             <div class="screen-num wrapped">03</div>
-            <div class="title">Achievements — Milestones</div>
+            <div class="title">Achievements</div>
             <div class="section-tag wrapped">Wrapped Moment</div>
           </div>
           <p>
-            Milestone-style achievement pills for cumulative thresholds the user
-            crossed this chapter. Max 2–3 shown.
+            Shows all achievements the user earned during this chapter — covering activity from both their journey path and any explore sessions. Achievements are surfaced as they are awarded by the existing game system, not defined here.
           </p>
-
-          <div class="table-wrap" style="margin-bottom: 20px">
-            <table>
-              <thead>
-                <tr>
-                  <th>Label</th>
-                  <th>Trigger</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>"{N} minutes worked out"</td>
-                  <td>
-                    Cumulative <code>totalMinutes</code> crosses 100, 250, 500,
-                    1000…
-                  </td>
-                </tr>
-                <tr>
-                  <td>"{N} week streak"</td>
-                  <td><code>streakWeeks ≥ N</code></td>
-                </tr>
-                <tr>
-                  <td>"{N} classes completed"</td>
-                  <td>
-                    Lifetime <code>classesCompleted</code> crosses 10, 25, 50,
-                    100…
-                  </td>
-                </tr>
-                <tr>
-                  <td>"{N} calories burned"</td>
-                  <td>
-                    Lifetime <code>caloriesBurned</code> crosses 1000, 2500,
-                    5000…
-                  </td>
-                </tr>
-                <tr>
-                  <td>"First chapter complete"</td>
-                  <td><code>previousClassesCompleted === 0</code></td>
-                </tr>
-                <tr>
-                  <td>"Top {N}% this chapter"</td>
-                  <td><code>percentile ≤ 10</code></td>
-                </tr>
-                <tr>
-                  <td>"{N} punches thrown"</td>
-                  <td>Lifetime punch total crosses 500, 1000, 5000…</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div class="info-box note">
-            <div class="info-box-icon">ℹ</div>
-            <p>
-              <strong>Priority if >3 milestones crossed:</strong> Streak →
-              Minutes → Classes → Others
-            </p>
-          </div>
-          <div class="info-box warn">
-            <div class="info-box-icon">⚠</div>
-            <p>
-              <strong>Open Q:</strong> Are these a pre-existing FitXR
-              achievement system we surface, or do we define them from scratch?
-              Do they persist in a collection? See Open Questions #9.
-            </p>
-          </div>
+          <div class="conditional-label">Conditional</div>
         </div>
       </section>
 
       <!-- S4 -->
       <section id="s4">
-        <div class="screen-card">
+        <div class="screen-card conditional">
           <div class="screen-card-header">
             <div class="screen-num wrapped">04</div>
             <div class="title">Streak — Calendar Grid</div>
@@ -2161,73 +2129,22 @@
               calendar dates or just M/T/W/T/F/S/S labels?
             </p>
           </div>
+          <div class="conditional-label">Conditional</div>
         </div>
       </section>
 
       <!-- S5 -->
       <section id="s5">
-        <div class="screen-card">
+        <div class="screen-card conditional">
           <div class="screen-card-header">
             <div class="screen-num wrapped">05</div>
             <div class="title">League — Rank + Leaderboard</div>
             <div class="section-tag wrapped">Wrapped Moment</div>
           </div>
           <p>
-            Shows where the user sits in the social leaderboard. All league data
-            comes from the server.
+            This screen only appears if the user climbed up in the leaderboard compared to their previous checkpoint — i.e. <code>leagueRankChange &gt; 0</code>. If they stayed the same or dropped, the screen is skipped.
           </p>
-
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Element</th>
-                  <th>Variable</th>
-                  <th>Logic</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>League tier name</td>
-                  <td><code>leagueName</code></td>
-                  <td>Server-side e.g. Diamond, Gold, Silver, Bronze</td>
-                </tr>
-                <tr>
-                  <td>League icon</td>
-                  <td><code>leagueIcon</code></td>
-                  <td>Server-side emoji</td>
-                </tr>
-                <tr>
-                  <td>Rank position</td>
-                  <td><code>leagueRank / leagueTotalPlayers</code></td>
-                  <td>Server-side</td>
-                </tr>
-                <tr>
-                  <td>Rank change</td>
-                  <td><code>leagueRankChange</code></td>
-                  <td>Positive = climbed, negative = dropped</td>
-                </tr>
-                <tr>
-                  <td>Leaderboard preview</td>
-                  <td>Top 2 + current user</td>
-                  <td>Server-side: usernames + MP totals</td>
-                </tr>
-                <tr>
-                  <td>Motivational copy</td>
-                  <td>—</td>
-                  <td>Shown if <code>leagueRankChange &gt; 0</code></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div class="info-box note">
-            <div class="info-box-icon">ℹ</div>
-            <p>
-              <strong>Motivational copy format:</strong>
-              <code>"↑ You climbed {N} places this chapter!"</code>
-            </p>
-          </div>
+          <div class="conditional-label">Conditional</div>
         </div>
       </section>
 
@@ -2663,12 +2580,12 @@
 
     <script>
       // Collapsible toggles (closed by default)
-      document.querySelectorAll('.toggle-heading').forEach(heading => {
+      document.querySelectorAll(".toggle-heading").forEach((heading) => {
         const body = document.getElementById(heading.dataset.target);
-        heading.addEventListener('click', () => {
-          const isOpen = body.classList.contains('open');
-          body.classList.toggle('open', !isOpen);
-          heading.classList.toggle('open', !isOpen);
+        heading.addEventListener("click", () => {
+          const isOpen = body.classList.contains("open");
+          body.classList.toggle("open", !isOpen);
+          heading.classList.toggle("open", !isOpen);
         });
       });
 
