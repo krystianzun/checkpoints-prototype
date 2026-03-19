@@ -546,14 +546,17 @@
       }
 
       /* ── SCREEN REFERENCE IMAGE ── */
+      .screen-card-header {
+        align-items: flex-start;
+      }
       .screen-ref {
-        float: right;
-        margin: 0 0 20px 24px;
         flex-shrink: 0;
+        margin-left: 16px;
+        align-self: flex-start;
       }
       .screen-ref img {
-        width: 140px;
-        border-radius: 16px;
+        width: 120px;
+        border-radius: 14px;
         border: 1px solid var(--border);
         display: block;
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
@@ -608,9 +611,14 @@
       }
       .screen-card-header {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         gap: 12px;
         margin-bottom: 20px;
+      }
+      .screen-card-header .screen-num,
+      .screen-card-header .title,
+      .screen-card-header .section-tag {
+        margin-top: 7px;
       }
       .screen-num {
         width: 34px;
@@ -1616,18 +1624,18 @@
       <!-- S0 -->
       <section id="s0">
         <div class="screen-card">
-          <div class="screen-ref">
-            <img
-              src="../src/screenshots/check-1.png"
-              alt="Screen 00 — Welcome"
-              onclick="openLightbox(this.src)"
-            />
-            <div class="ref-label">Design ref</div>
-          </div>
           <div class="screen-card-header">
             <div class="screen-num wrapped">00</div>
             <div class="title">Welcome — Celebrate</div>
             <div class="section-tag wrapped">Wrapped Moment</div>
+            <div class="screen-ref">
+              <img
+                src="../src/screenshots/check-1.png"
+                alt="Screen 00 — Welcome"
+                onclick="openLightbox(this.src)"
+              />
+              <div class="ref-label">Design ref</div>
+            </div>
           </div>
           <p>
             Full-screen background photo. All content is static — no computed
@@ -1674,18 +1682,18 @@
       <!-- S1 -->
       <section id="s1">
         <div class="screen-card">
-          <div class="screen-ref">
-            <img
-              src="../src/screenshots/check-2.png"
-              alt="Screen 01 — Stats"
-              onclick="openLightbox(this.src)"
-            />
-            <div class="ref-label">Design ref</div>
-          </div>
           <div class="screen-card-header">
             <div class="screen-num wrapped">01</div>
             <div class="title">Stats — Classes + Highlight</div>
             <div class="section-tag wrapped">Wrapped Moment</div>
+            <div class="screen-ref">
+              <img
+                src="../src/screenshots/check-2.png"
+                alt="Screen 01 — Stats"
+                onclick="openLightbox(this.src)"
+              />
+              <div class="ref-label">Design ref</div>
+            </div>
           </div>
           <p>
             Shows how many classes were completed this chapter with a delta vs
@@ -2052,18 +2060,18 @@
       <!-- S2 -->
       <section id="s2">
         <div class="screen-card">
-          <div class="screen-ref">
-            <img
-              src="../src/screenshots/check-3.png"
-              alt="Screen 02 — Effort"
-              onclick="openLightbox(this.src)"
-            />
-            <div class="ref-label">Design ref</div>
-          </div>
           <div class="screen-card-header">
             <div class="screen-num wrapped">02</div>
             <div class="title">Effort — Time, MP, Calories</div>
             <div class="section-tag wrapped">Wrapped Moment</div>
+            <div class="screen-ref">
+              <img
+                src="../src/screenshots/check-3.png"
+                alt="Screen 02 — Effort"
+                onclick="openLightbox(this.src)"
+              />
+              <div class="ref-label">Design ref</div>
+            </div>
           </div>
           <p>
             Aggregate effort for the chapter with chapter-over-chapter deltas.
@@ -2347,18 +2355,18 @@
       <!-- S3 -->
       <section id="s3">
         <div class="screen-card conditional">
-          <div class="screen-ref">
-            <img
-              src="../src/screenshots/check-4.png"
-              alt="Screen 03 — Achievements"
-              onclick="openLightbox(this.src)"
-            />
-            <div class="ref-label">Design ref</div>
-          </div>
           <div class="screen-card-header">
             <div class="screen-num wrapped">03</div>
             <div class="title">Achievements</div>
             <div class="section-tag wrapped">Wrapped Moment</div>
+            <div class="screen-ref">
+              <img
+                src="../src/screenshots/check-4.png"
+                alt="Screen 03 — Achievements"
+                onclick="openLightbox(this.src)"
+              />
+              <div class="ref-label">Design ref</div>
+            </div>
           </div>
           <p>
             Shows all achievements the user earned during this chapter —
@@ -2373,18 +2381,18 @@
       <!-- S4 -->
       <section id="s4">
         <div class="screen-card conditional">
-          <div class="screen-ref">
-            <img
-              src="../src/screenshots/check-5.png"
-              alt="Screen 04 — Streak"
-              onclick="openLightbox(this.src)"
-            />
-            <div class="ref-label">Design ref</div>
-          </div>
           <div class="screen-card-header">
             <div class="screen-num wrapped">04</div>
             <div class="title">Daily Streak</div>
             <div class="section-tag wrapped">Wrapped Moment</div>
+            <div class="screen-ref">
+              <img
+                src="../src/screenshots/check-5.png"
+                alt="Screen 04 — Streak"
+                onclick="openLightbox(this.src)"
+              />
+              <div class="ref-label">Design ref</div>
+            </div>
           </div>
           <p>
             Celebrates the user's current daily streak — the number of
@@ -2426,18 +2434,18 @@
       <!-- S5 -->
       <section id="s5">
         <div class="screen-card conditional">
-          <div class="screen-ref">
-            <img
-              src="../src/screenshots/check-6.png"
-              alt="Screen 05 — League"
-              onclick="openLightbox(this.src)"
-            />
-            <div class="ref-label">Design ref</div>
-          </div>
           <div class="screen-card-header">
             <div class="screen-num wrapped">05</div>
             <div class="title">League — Rank + Leaderboard</div>
             <div class="section-tag wrapped">Wrapped Moment</div>
+            <div class="screen-ref">
+              <img
+                src="../src/screenshots/check-6.png"
+                alt="Screen 05 — League"
+                onclick="openLightbox(this.src)"
+              />
+              <div class="ref-label">Design ref</div>
+            </div>
           </div>
           <p>
             This screen only appears if the user climbed up in the leaderboard
@@ -2454,18 +2462,18 @@
       <!-- S6 -->
       <section id="s6">
         <div class="screen-card">
-          <div class="screen-ref">
-            <img
-              src="../src/screenshots/check-7.png"
-              alt="Screen 06 — Plan Welcome"
-              onclick="openLightbox(this.src)"
-            />
-            <div class="ref-label">Design ref</div>
-          </div>
           <div class="screen-card-header">
             <div class="screen-num plan">06</div>
             <div class="title">Welcome — Plan</div>
             <div class="section-tag plan">Plan Reset</div>
+            <div class="screen-ref">
+              <img
+                src="../src/screenshots/check-7.png"
+                alt="Screen 06 — Plan Welcome"
+                onclick="openLightbox(this.src)"
+              />
+              <div class="ref-label">Design ref</div>
+            </div>
           </div>
           <p>
             Static transition screen bridging the Wrapped Moment into Plan
@@ -2513,18 +2521,18 @@
       <!-- S7 -->
       <section id="s7">
         <div class="screen-card">
-          <div class="screen-ref">
-            <img
-              src="../src/screenshots/check-8.png"
-              alt="Screen 07 — Intensity"
-              onclick="openLightbox(this.src)"
-            />
-            <div class="ref-label">Design ref</div>
-          </div>
           <div class="screen-card-header">
             <div class="screen-num plan">07</div>
             <div class="title">Intensity Suggestion</div>
             <div class="section-tag plan">Plan Reset</div>
+            <div class="screen-ref">
+              <img
+                src="../src/screenshots/check-8.png"
+                alt="Screen 07 — Intensity"
+                onclick="openLightbox(this.src)"
+              />
+              <div class="ref-label">Design ref</div>
+            </div>
           </div>
           <p>
             Presents the recommendation engine's output to the user in a
@@ -2586,18 +2594,18 @@
       <!-- S8 -->
       <section id="s8">
         <div class="screen-card">
-          <div class="screen-ref">
-            <img
-              src="../src/screenshots/check-9.png"
-              alt="Screen 08 — Plan"
-              onclick="openLightbox(this.src)"
-            />
-            <div class="ref-label">Design ref</div>
-          </div>
           <div class="screen-card-header">
             <div class="screen-num plan">08</div>
             <div class="title">Plan — Editable Items</div>
             <div class="section-tag plan">Plan Reset</div>
+            <div class="screen-ref">
+              <img
+                src="../src/screenshots/check-9.png"
+                alt="Screen 08 — Plan"
+                onclick="openLightbox(this.src)"
+              />
+              <div class="ref-label">Design ref</div>
+            </div>
           </div>
           <p>
             Shows the user's plan for the next chapter with three tappable rows.
