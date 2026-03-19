@@ -954,6 +954,39 @@
         opacity: 0.6;
       }
 
+      /* ── TOGGLE ── */
+      .toggle-heading {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        user-select: none;
+        padding: 14px 20px;
+        margin: -14px -20px 0;
+        border-radius: 10px;
+        transition: background 0.15s;
+      }
+      .toggle-heading:hover { background: rgba(255,255,255,0.03); }
+      .toggle-icon {
+        display: flex;
+        align-items: center;
+        color: var(--muted);
+        flex-shrink: 0;
+        transition: transform 0.25s ease, color 0.15s;
+      }
+      .toggle-heading.open .toggle-icon { transform: rotate(180deg); color: var(--blue); }
+      .toggle-body {
+        overflow: hidden;
+        max-height: 0;
+        transition: max-height 0.35s ease, opacity 0.25s ease;
+        opacity: 0;
+      }
+      .toggle-body.open {
+        max-height: 9999px;
+        opacity: 1;
+      }
+
       @media (max-width: 900px) {
         aside {
           display: none;
@@ -1171,7 +1204,13 @@
 
       <!-- DATA SOURCES -->
       <section id="data-sources">
-        <h2>Data Sources</h2>
+        <h2 class="toggle-heading" data-target="data-sources-body">
+          Data Sources
+          <span class="toggle-icon">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </h2>
+        <div id="data-sources-body" class="toggle-body">
         <p class="section-intro">
           All per-session fields come from the raw session CSV. Cross-chapter
           comparisons use the equivalent window from the previous chapter.
@@ -1427,13 +1466,20 @@
             </tbody>
           </table>
         </div>
+        </div><!-- /toggle-body data-sources -->
       </section>
 
       <div class="divider"></div>
 
       <!-- DERIVED AGGREGATES -->
       <section id="derived-aggregates">
-        <h2>Derived Aggregates</h2>
+        <h2 class="toggle-heading" data-target="derived-aggregates-body">
+          Derived Aggregates
+          <span class="toggle-icon">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </h2>
+        <div id="derived-aggregates-body" class="toggle-body">
         <p class="section-intro">
           Higher-level metrics are computed by rolling up raw session fields.
           Class-level is always raw — no derivation needed.
@@ -1478,6 +1524,7 @@
           streakDays = binary array: 1 for each day with ≥1 session<br />
           streakWeeks = longest run of 7-day windows with ≥ N active days
         </div>
+        </div><!-- /toggle-body derived-aggregates -->
       </section>
 
       <div class="divider"></div>
@@ -2615,6 +2662,16 @@
     </main>
 
     <script>
+      // Collapsible toggles (closed by default)
+      document.querySelectorAll('.toggle-heading').forEach(heading => {
+        const body = document.getElementById(heading.dataset.target);
+        heading.addEventListener('click', () => {
+          const isOpen = body.classList.contains('open');
+          body.classList.toggle('open', !isOpen);
+          heading.classList.toggle('open', !isOpen);
+        });
+      });
+
       // Active nav link on scroll
       const sections = document.querySelectorAll("section[id], div[id]");
       const navLinks = document.querySelectorAll(".nav-link");
