@@ -2911,5 +2911,197 @@
 
       sections.forEach((section) => observer.observe(section));
     </script>
+
+    <!-- Smooth Scroll Recorder Button -->
+    <style>
+      #scroll-recorder {
+        position: fixed;
+        bottom: 28px;
+        right: 28px;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 8px;
+        font-family: 'Space Grotesk', sans-serif;
+      }
+
+      #scroll-recorder .sr-controls {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(15, 20, 32, 0.92);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 40px;
+        padding: 6px 10px 6px 14px;
+        backdrop-filter: blur(12px);
+        box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+        transition: opacity 0.2s;
+      }
+
+      #scroll-recorder .sr-label {
+        font-size: 11px;
+        font-weight: 500;
+        color: rgba(255,255,255,0.45);
+        letter-spacing: 0.04em;
+        white-space: nowrap;
+        user-select: none;
+      }
+
+      #scroll-recorder .sr-speed {
+        display: flex;
+        align-items: center;
+        gap: 2px;
+      }
+
+      #scroll-recorder .sr-speed button {
+        background: none;
+        border: 1px solid rgba(255,255,255,0.1);
+        color: rgba(255,255,255,0.5);
+        font-size: 11px;
+        width: 20px;
+        height: 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: border-color 0.15s, color 0.15s;
+        padding: 0;
+        font-family: inherit;
+      }
+
+      #scroll-recorder .sr-speed button:hover {
+        border-color: rgba(255,255,255,0.3);
+        color: rgba(255,255,255,0.8);
+      }
+
+      #scroll-recorder .sr-speed-val {
+        font-size: 11px;
+        color: rgba(255,255,255,0.5);
+        min-width: 26px;
+        text-align: center;
+        user-select: none;
+      }
+
+      #scroll-recorder .sr-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.15s, background 0.2s;
+        flex-shrink: 0;
+      }
+
+      #scroll-recorder .sr-btn:hover {
+        transform: scale(1.08);
+      }
+
+      #scroll-recorder .sr-btn.start {
+        background: #3d8bff;
+        box-shadow: 0 0 14px rgba(61,139,255,0.45);
+      }
+
+      #scroll-recorder .sr-btn.stop {
+        background: #ff5f3d;
+        box-shadow: 0 0 14px rgba(255,95,61,0.45);
+      }
+
+      #scroll-recorder .sr-btn svg {
+        width: 14px;
+        height: 14px;
+        fill: #fff;
+      }
+    </style>
+
+    <div id="scroll-recorder">
+      <div class="sr-controls">
+        <span class="sr-label">scroll speed</span>
+        <div class="sr-speed">
+          <button id="sr-slower">−</button>
+          <span class="sr-speed-val" id="sr-speed-display">1×</span>
+          <button id="sr-faster">+</button>
+        </div>
+        <button class="sr-btn start" id="sr-toggle" title="Start smooth scroll">
+          <svg viewBox="0 0 10 12"><polygon points="1,0 9,6 1,12"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        const speeds = [0.3, 0.5, 0.75, 1, 1.5, 2, 3];
+        let speedIdx = 3; // default 1×
+        let scrolling = false;
+        let rafId = null;
+        let lastTime = null;
+
+        const btn = document.getElementById('sr-toggle');
+        const slowerBtn = document.getElementById('sr-slower');
+        const fasterBtn = document.getElementById('sr-faster');
+        const speedDisplay = document.getElementById('sr-speed-display');
+
+        function updateSpeedDisplay() {
+          const v = speeds[speedIdx];
+          speedDisplay.textContent = v + '×';
+        }
+
+        slowerBtn.addEventListener('click', () => {
+          if (speedIdx > 0) { speedIdx--; updateSpeedDisplay(); }
+        });
+
+        fasterBtn.addEventListener('click', () => {
+          if (speedIdx < speeds.length - 1) { speedIdx++; updateSpeedDisplay(); }
+        });
+
+        function scrollStep(ts) {
+          if (!scrolling) return;
+          if (lastTime === null) { lastTime = ts; }
+          const dt = ts - lastTime;
+          lastTime = ts;
+
+          // px per ms at 1× speed = 0.06 px/ms (≈ 60px/s at 1×)
+          const pxPerMs = 0.06 * speeds[speedIdx];
+          window.scrollBy(0, pxPerMs * dt);
+
+          const maxScroll = document.body.scrollHeight - window.innerHeight;
+          if (window.scrollY >= maxScroll - 1) {
+            stopScroll();
+            return;
+          }
+
+          rafId = requestAnimationFrame(scrollStep);
+        }
+
+        function startScroll() {
+          scrolling = true;
+          lastTime = null;
+          btn.classList.remove('start');
+          btn.classList.add('stop');
+          btn.title = 'Stop scroll';
+          btn.innerHTML = '<svg viewBox="0 0 10 10"><rect x="0" y="0" width="4" height="10"/><rect x="6" y="0" width="4" height="10"/></svg>';
+          rafId = requestAnimationFrame(scrollStep);
+        }
+
+        function stopScroll() {
+          scrolling = false;
+          if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+          btn.classList.remove('stop');
+          btn.classList.add('start');
+          btn.title = 'Start smooth scroll';
+          btn.innerHTML = '<svg viewBox="0 0 10 12"><polygon points="1,0 9,6 1,12"/></svg>';
+        }
+
+        btn.addEventListener('click', () => {
+          if (scrolling) { stopScroll(); } else { startScroll(); }
+        });
+
+        updateSpeedDisplay();
+      })();
+    </script>
   </body>
 </html>
